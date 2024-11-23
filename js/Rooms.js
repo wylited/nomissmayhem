@@ -69,7 +69,8 @@ const shopRoom = {
     coins: [],
     type: "shop",
     keys: [],
-    powerUps: ['extraballs', 'extrahealth']
+    powerUps: [['extraballs', 2], ['extrahealth', 1]],
+    bought: [0, 0]
 };
 
 const nullTile = {

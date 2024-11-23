@@ -169,20 +169,23 @@ export class Renderer {
 
     // render cards in shop
     if (room.type=="shop") {
+      if (!room.bought[0]) {
       this.ctx.fillStyle = '#4a4a4a';
       this.ctx.fillRect(180, 35, 100, 150);
       this.ctx.fillStyle = '#ffffff';
       this.ctx.font = '20px Arial';
       this.ctx.textAlign = 'center';
       this.ctx.fillText('Item', 230, 80);
-    
+      }
       // Second card
+      if (!room.bought[1]) {
       this.ctx.fillStyle = '#4a4a4a';
       this.ctx.fillRect(320, 35, 100, 150);
       this.ctx.fillStyle = '#ffffff';
       this.ctx.font = '20px Arial';
       this.ctx.textAlign = 'center';
       this.ctx.fillText('Item', 370, 80);
+      }
     }
 
     this.ctx.fillStyle = '#fff';

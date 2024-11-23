@@ -101,7 +101,15 @@ export class Player {
     this.moneyElement.textContent = `Money: ${this.money}`;
   }
 
+  getMoney() {
+    return this.money;
+  }
+
   addKey(keyid){
     this.keys.push(keyid);
+  }
+
+  addPowerup(power) {
+    console.log(power);
   }
 }

@@ -7,6 +7,7 @@ import { Music } from './Music.js';
 import { Key } from './Key.js';
 import { CANVAS, BULLETS_LIMITER } from './constants.js';
 import { Coin } from './Coin.js';
+import { checkCardCollision } from './Store.js';
 
 export class Game {
   constructor() {
@@ -229,6 +230,8 @@ export class Game {
   update() {
     this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
 
+    
+
     // Update enemies
     this.getCurrentRoom().enemies.forEach((enemy, index) => {
       if (enemy.isActive) {
@@ -314,6 +317,20 @@ export class Game {
             Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.right.shotcount += 1;
           }
           break;
+      }
+
+      res = checkCardCollision(this.getCurrentRoom(), proj);
+
+      if (res) {
+        if (res[1][1] <= this.player.getMoney()) {
+          this.player.addPowerup(res[1][0]);
+          this.player.addMoney(-1*res[1][1]);
+
+          Rooms[this.roomPosition[0]][this.roomPosition[1]].bought[res[0]] = 1;
+          this.getCurrentRoom().projectiles.splice(i, 1);
+        }
+
+        
       }
     }
 
