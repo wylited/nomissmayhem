@@ -245,10 +245,10 @@ const storeRoom15 = {
 const defaultRoom06 = {
     background: "/rooms/room2.png",
     travel: {
-        up: { type: "wall", open: 0, openreq: 8, shotcount: 0 },
+        up: { type: "door", open: 0, openreq: 8, shotcount: 0 },
         down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
         left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
-        right: { type: "door", open: 0, openreq: 7, shotcount: 0 },
+        right: { type: "wall", open: 0, openreq: 7, shotcount: 0 },
     },
     enemies: [
         EnemyFactory.createEnemy('regular', 150, 100),
@@ -293,7 +293,7 @@ const keyRoom = {
         right: { type: "wall", open: 0, openreq: 7, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('attacker', 150, 100),
+        EnemyFactory.createEnemy('attacker', 150, 100), 
         EnemyFactory.createEnemy('regular', 400, 100, '', true, true, 50, 500),
         EnemyFactory.createEnemy('attacker', 250, 500),
         EnemyFactory.createEnemy('attacker', 300, 200)
