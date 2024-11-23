@@ -14,6 +14,10 @@ export class Enemy {
         this.isActive = true;
         this.color = '#ff0000';
         this.minDistanceFromPlayer = this.radius * 2; // Minimum distance to maintain from player
+        this.coinDrop = {
+            type: 'bronze',
+            value: 1
+        };
     }
 
     update(player) {
@@ -44,6 +48,7 @@ export class Enemy {
         this.health -= damage;
         if (this.health <= 0) {
             this.isActive = false;
+            console.log('Enemy died, dropping coin:', this.coinDrop);
         }
     }
 
@@ -64,6 +69,10 @@ export class ShieldedEnemy extends Enemy {
         this.shieldActive = true;
         this.shieldAngle = 0; // Shield facing angle
         this.shieldArc = Math.PI / 2; // Shield covers 90 degrees
+        this.coinDrop = {
+            type: 'silver',
+            value: 2
+        };
     }
 
     update(player) {
@@ -84,6 +93,10 @@ export class ReflectorEnemy extends ShieldedEnemy {
         super(x, y);
         this.type = 'reflector';
         this.color = '#0000ff';
+        this.coinDrop = {
+            type: 'gold',
+            value: 5
+        };
     }
 
     reflectBullet(projectile) {
@@ -101,7 +114,11 @@ export class AttackerEnemy extends Enemy {
         this.attackCooldown = 2000; // ms
         this.lastAttack = 0;
         this.minDistanceFromPlayer = this.radius * 12; // Increased distance for attacker
-        this.projectileSpeed = 8; // Projectile speed
+        this.projectileSpeed = 10; // Projectile speed
+        this.coinDrop = {
+            type: 'gold',
+            value: 5
+        };
     }
 
     update(player, gameTime) {

@@ -14,6 +14,7 @@ const startRoom = {
     enemies: [
     ],
     projectiles: [],
+    coins: [],
 };
 
 const emptyRoom = {
@@ -29,6 +30,7 @@ const emptyRoom = {
         EnemyFactory.createEnemy('attacker', 250, 200),
     ],
     projectiles: [],
+    coins: [],
 };
 
 export const startIndex = [1, 0];

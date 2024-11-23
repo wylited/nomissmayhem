@@ -140,5 +140,23 @@ export class Renderer {
         this.ctx.fill();
       });
     }
+
+    // Draw coins with debug logging
+    if (room.coins && room.coins.length > 0) {
+        room.coins.forEach(coin => {
+            this.ctx.beginPath();
+            this.ctx.arc(coin.x, coin.y, coin.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = coin.color;
+            this.ctx.fill();
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = 1;
+            this.ctx.stroke();
+        });
+    }
+
+    // Draw money counter (optional)
+    this.ctx.fillStyle = '#fff';
+    this.ctx.font = '20px Arial';
+    this.ctx.fillText(`Money: ${player.money}`, 10, 30);
   }
 }

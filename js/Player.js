@@ -19,6 +19,7 @@ export class Player {
     this.dashDistance = PLAYER.DASH_DISTANCE;
     this.dashDuration = PLAYER.DASH_DURATION;
     this.trailPositions = [];
+    this.money = 0;
   }
 
   handleDash(mouseX, mouseY, dashElement) {
@@ -90,5 +91,9 @@ export class Player {
 
     if (Math.abs(this.dx) < 0.01) this.dx = 0;
     if (Math.abs(this.dy) < 0.01) this.dy = 0;
+  }
+
+  addMoney(amount) {
+    this.money += amount;
   }
 }

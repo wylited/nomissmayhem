@@ -6,6 +6,7 @@ import { Rooms, startIndex } from './Rooms.js';
 import { Music } from './Music.js';
 import { EnemyFactory } from './Enemy.js';
 import { CANVAS, BULLETS_LIMITER } from './constants.js';
+import { Coin } from './Coin.js';
 
 export class Game {
   constructor() {
@@ -229,6 +230,14 @@ export class Game {
           if (!proj.isEnemyProjectile && checkCollision(enemy, proj)) {
             enemy.takeDamage(20);
             this.getCurrentRoom().projectiles.splice(projIndex, 1);
+            
+            // Drop coin when enemy dies
+            if (!enemy.isActive) {
+              const coin = new Coin(enemy.x, enemy.y, enemy.coinDrop.value, enemy.coinDrop.type);
+              this.getCurrentRoom().coins.push(coin);
+              console.log('Created coin:', coin);
+              console.log('Current room coins:', this.getCurrentRoom().coins);
+            }
           }
         });
       } else {
@@ -252,6 +261,20 @@ export class Game {
         this.getCurrentRoom().projectiles.splice(i, 1);
       }
     }
+
+    // Check coin collection
+    this.getCurrentRoom().coins = this.getCurrentRoom().coins.filter(coin => {
+      const distance = Math.sqrt(
+        Math.pow(this.player.x - coin.x, 2) + 
+        Math.pow(this.player.y - coin.y, 2)
+      );
+      
+      if (distance < this.player.radius + coin.radius) {
+        this.player.addMoney(coin.value);
+        return false;
+      }
+      return true;
+    });
 
     this.checkRooms();
   }

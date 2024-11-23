@@ -22,3 +22,12 @@ export const PROJECTILE = {
 };
 
 export const BULLETS_LIMITER = 5;
+
+export const COIN = {
+  RADIUS: 8,
+  COLORS: {
+      bronze: '#cd7f32',
+      silver: '#c0c0c0',
+      gold: '#ffd700'
+  }
+};
