@@ -123,6 +123,10 @@ export class Player {
         document.getElementById('score').textContent = `Health: ${PLAYER.MAX_HEALTH}`;
         break;
 
+      case "super":
+        this.shootCooldown = 0;
+        break;
+
     }
     console.log(power);
   }
