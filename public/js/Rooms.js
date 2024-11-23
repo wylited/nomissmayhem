@@ -137,7 +137,7 @@ const tutorialRoom2 = {
 };
 
 const tutorialRoom3 = {
-    background: "/rooms/room1.png",
+    background: "/rooms/tutorial3.png",
     travel: {
         up: { type: "door", open: 0, openreq: 4, shotcount: 0 },
         down: { type: "key", open: 0, openreq: 0, shotcount: 0 },
