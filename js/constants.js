@@ -20,3 +20,5 @@ export const PROJECTILE = {
   MAX_BOUNCES: 100,
   RADIUS: 5
 };
+
+export const BULLETS_LIMITER = 5;

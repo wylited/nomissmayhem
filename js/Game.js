@@ -1,10 +1,10 @@
-// Game.js
-import { CANVAS } from './constants.js';
+import { CANVAS, BULLETS_LIMITER } from './constants.js'; // Import BULLETS_PER_SECOND
 import { Player } from './Player.js';
 import { Projectile } from './Projectile.js';
 import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
 import { Rooms, startIndex } from './Rooms.js';
+import { Music } from './Music.js';
 
 export class Game {
   constructor() {
@@ -12,6 +12,8 @@ export class Game {
     this.blurCanvas = document.getElementById('blurCanvas');
     this.scoreElement = document.getElementById('score');
     this.dashElement = document.getElementById('dash');
+
+    this.music = new Music();
 
     this.player = new Player(CANVAS.WIDTH / 2, CANVAS.HEIGHT / 2);
     this.renderer = new Renderer(this.canvas, this.blurCanvas);
@@ -24,9 +26,8 @@ export class Game {
       a: false,
       s: false,
       d: false,
-      shift: false
+      shift: false,
     };
-    this.roomPosition = startIndex;
 
     this.setup();
   }
@@ -34,7 +35,33 @@ export class Game {
   setup() {
     this.resizeCanvas();
     this.setupEventListeners();
+
+    this.music.init();
+    this.setupMusicControls();
+
     this.gameLoop();
+  }
+
+  setupMusicControls() {
+    // Optional: Add music controls with 'M' key to mute/unmute
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'm') {
+        if (this.music.currentAudio.paused) {
+          this.music.play();
+        } else {
+          this.music.stop();
+        }
+      }
+    });
+
+    // Start playing music on first click (many browsers require user interaction)
+    window.addEventListener(
+      'click',
+      () => {
+        this.music.play();
+      },
+      { once: true }
+    );
   }
 
   resizeCanvas() {
@@ -43,7 +70,7 @@ export class Game {
     this.blurCanvas.width = CANVAS.WIDTH;
     this.blurCanvas.height = CANVAS.HEIGHT;
 
-    [this.canvas, this.blurCanvas].forEach(canvas => {
+    [this.canvas, this.blurCanvas].forEach((canvas) => {
       canvas.style.position = 'absolute';
       canvas.style.left = '50%';
       canvas.style.top = '50%';
@@ -74,12 +101,18 @@ export class Game {
     });
 
     this.canvas.addEventListener('click', (e) => {
-      const rect = this.canvas.getBoundingClientRect();
-      const canvasX = e.clientX - rect.left;
-      const canvasY = e.clientY - rect.top;
+      const currentTime = Date.now();
+      if (currentTime - this.lastBulletTime >= this.bulletCooldown) {
+        // Check if enough time has passed since the last bullet was fired
+        const rect = this.canvas.getBoundingClientRect();
+        const canvasX = e.clientX - rect.left;
+        const canvasY = e.clientY - rect.top;
 
-      const angle = Math.atan2(canvasY - this.player.y, canvasX - this.player.x);
-      this.projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
+        const angle = Math.atan2(canvasY - this.player.y, canvasX - this.player.x);
+        this.projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
+
+        this.lastBulletTime = currentTime; // Update the last bullet firing time
+      }
     });
   }
 
