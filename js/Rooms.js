@@ -24,11 +24,11 @@ const emptyRoom = {
     travel: {
         up: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
         down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
-        left: { type: "door", open: 0, openreq: 5, shotcount: 0 },
-        right: { type: "door", open: 0, openreq: 10, shotcount: 0 },
+        left: { type: "door", open: 0, openreq: 6, shotcount: 0 },
+        right: { type: "wall", open: 0, openreq: 10, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('regular', 150, 100, 'keyer', true),
+        EnemyFactory.createEnemy('attacker', 150, 100, 'keyer', true),
         EnemyFactory.createEnemy('attacker', 250, 200, 'keyless'),
     ],
     projectiles: [],
@@ -55,7 +55,7 @@ const testRoom = {
 };
 
 const shopRoom = {
-    background: "/rooms/store.png",
+    background: "/rooms/storetutorial.jpg",
     travel: {
         up: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
         down: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
@@ -90,19 +90,53 @@ const nullTile = {
     type: "regular"
 };
 
-export const startIndex = [1, 1];
+const tutorialRoom = {
+    background: "/rooms/tutorial1.jpg",
+    travel: {
+        up: { type: "door", open: 0, openreq: 3, shotcount: 0 },
+        down: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+    },
+    enemies: [
+        
+    ],
+    projectiles: [],
+    coins: [],
+    keys: [],
+    type: "regular"
+};
+
+const tutorialRoom2 = {
+    background: "/rooms/tutorial2.jpg",
+    travel: {
+        up: { type: "door", open: 0, openreq: 3, shotcount: 0 },
+        down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
+        left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+    },
+    enemies: [
+        EnemyFactory.createEnemy('regular', 150, 100)
+    ],
+    projectiles: [],
+    coins: [],
+    keys: [],
+    type: "regular"
+};
+
+export const startIndex = [2, 1];
 
 export const Rooms = [
-    [shopRoom, emptyRoom, testRoom],
-    [nullTile, startRoom, nullTile],
+    [shopRoom, emptyRoom, nullTile],
+    [nullTile, tutorialRoom2, nullTile],
+    [nullTile, tutorialRoom, nullTile]
 ];
 
 export function checkDoorCollision(proj) {
     let x = proj.x;
     let y = proj.y;
     //260 -> 340, 20 tall
-    //this.ctx.fillRect(350, 35, 140, 200);
-    //this.ctx.fillRect(150, 35, 140, 200);
+    
 
     if (x > 258 && x < 342) {
         if (y < 22) {

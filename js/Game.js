@@ -8,6 +8,7 @@ import { Key } from './Key.js';
 import { CANVAS, BULLETS_LIMITER, PLAYER } from './constants.js';
 import { Coin } from './Coin.js';
 import { checkCardCollision } from './Store.js';
+import { createMinimap, updateMinimap } from './minimap.js';
 
 export class Game {
   constructor() {
@@ -50,6 +51,8 @@ export class Game {
     this.setupMusicControls();
 
     this.gameLoop();
+    createMinimap(Rooms, this.roomPosition);
+
   }
 
   setupMusicControls() {
