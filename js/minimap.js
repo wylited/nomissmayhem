@@ -1,13 +1,15 @@
 export function createMinimap(rooms, currentPosition) {
     const minimapContainer = document.getElementById('map');
-    const mapSize = 150; // Total minimap size
-    const roomSize = mapSize / rooms.length; // Size of each room cell
+    const mapHeight = 200; // Total minimap size
+    const mapWidth = 150; // Total minimap size
+    const roomHeight = mapHeight / rooms.length; // Size of each room cell
+    const roomWidth = mapWidth / rooms.length; // Size of each room cell
 
     const html = `
         <style>
             .minimap {
-                width: ${mapSize}px;
-                height: ${mapSize}px;
+                width: ${mapWidth}px;
+                height: ${mapHeight}px;
                 background: #333;
                 padding: 5px;
                 display: grid;

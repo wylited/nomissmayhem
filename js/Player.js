@@ -58,11 +58,10 @@ export class Player {
     let moveX = 0;
     let moveY = 0;
 
-    if (keys.w) moveY -= 1;
-    if (keys.s) moveY += 1;
-    if (keys.a) moveX -= 1;
-    if (keys.d) moveX += 1;
-
+    if (keys.w || keys.up) moveY -= 1;
+    if (keys.s || keys.down) moveY += 1;
+    if (keys.a || keys.left) moveX -= 1;
+    if (keys.d || keys.right) moveX += 1;
     if (moveX !== 0 && moveY !== 0) {
       const length = Math.sqrt(moveX * moveX + moveY * moveY);
       moveX /= length;
@@ -114,7 +113,13 @@ export class Player {
   addPowerup(power) {
     switch (power) {
       case "extraballs":
-        this.shootCooldown = 3;
+        this.shootCooldown = 150;
+        break;
+      
+      case "extrahealth":
+        PLAYER.MAX_HEALTH += 10;
+        this.health = PLAYER.MAX_HEALTH;
+        document.getElementById('score').textContent = `Health: ${PLAYER.MAX_HEALTH}`;
         break;
 
     }

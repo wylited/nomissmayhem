@@ -98,6 +98,7 @@ export class Game {
     window.addEventListener('keydown', (e) => {
       if (e.key.toLowerCase() in this.keys) {
         this.keys[e.key.toLowerCase()] = true;
+        console.log(e);
       }
     });
 
