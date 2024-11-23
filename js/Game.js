@@ -109,7 +109,7 @@ export class Game {
 
     this.canvas.addEventListener('click', (e) => {
       const currentTime = Date.now();
-      console.log(currentTime);
+      //console.log(currentTime);
       if ((currentTime - this.lastBulletTime) >= this.bulletCooldown) {
         // Check if enough time has passed since the last bullet was fired
         const rect = this.canvas.getBoundingClientRect();
@@ -219,8 +219,8 @@ export class Game {
 
   gameLoop() {
     this.update();
-    console.log(this.projectiles);
-    console.log(Rooms[this.roomPosition[0]][this.roomPosition[1]].background);
+    //console.log(this.projectiles);
+    //console.log(Rooms[this.roomPosition[0]][this.roomPosition[1]].background);
     this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY, Rooms[this.roomPosition[0]][this.roomPosition[1]].background, this.enemies); // Add enemies to render
     requestAnimationFrame(() => this.gameLoop());
   }
