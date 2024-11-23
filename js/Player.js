@@ -20,6 +20,7 @@ export class Player {
     this.dashDuration = PLAYER.DASH_DURATION;
     this.trailPositions = [];
     this.money = 0;
+    this.keys = [];
   }
 
   handleDash(mouseX, mouseY, dashElement) {
@@ -98,5 +99,9 @@ export class Player {
     this.moneyElement = document.getElementById('money');
     console.log(this.money)
     this.moneyElement.textContent = `Money: ${this.money}`;
+  }
+
+  addKey(keyid){
+    this.keys.push(keyid);
   }
 }

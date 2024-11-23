@@ -4,7 +4,7 @@ import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
 import { Rooms, startIndex, checkDoorCollision } from './Rooms.js';
 import { Music } from './Music.js';
-import { EnemyFactory } from './Enemy.js';
+import { Key } from './Key.js';
 import { CANVAS, BULLETS_LIMITER } from './constants.js';
 import { Coin } from './Coin.js';
 
@@ -29,10 +29,15 @@ export class Game {
     this.keys = {
       w: false,
       a: false,
-      s: false,
+      s: false, 
       d: false,
       shift: false,
     };
+
+    this.timerElement = document.getElementById('timer');
+    this.startTime = Date.now();
+    this.elapsedTime = 0;
+    this.isGameRunning = true;
 
     this.setup();
   }
@@ -210,6 +215,17 @@ export class Game {
     this.canvas.width
   }
 
+  updateTimer() {
+    if (this.isGameRunning) {
+      this.elapsedTime = Date.now() - this.startTime;
+      const seconds = Math.floor(this.elapsedTime / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      
+      this.timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+  }
+
   update() {
     this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
 
@@ -236,8 +252,14 @@ export class Game {
             
             // Drop coin when enemy dies
             if (!enemy.isActive) {
+              console.log("enemy", enemy);
               const coin = new Coin(enemy.x, enemy.y, enemy.coinDrop.value, enemy.coinDrop.type);
               this.getCurrentRoom().coins.push(coin);
+              if (enemy.hasKey) {
+                console.log("dropping key");
+                const key = new Key(enemy.id, enemy.x, enemy.y);
+                this.getCurrentRoom().keys.push(key);
+              }
               console.log('Created coin:', coin);
               console.log('Current room coins:', this.getCurrentRoom().coins);
             }
@@ -309,7 +331,22 @@ export class Game {
       return true;
     });
 
+    // Check key collection
+    this.getCurrentRoom().keys = this.getCurrentRoom().keys.filter(key => {
+      const distance = Math.sqrt(
+        Math.pow(this.player.x - key.x, 2) + 
+        Math.pow(this.player.y - key.y, 2)
+      );
+      
+      if (distance < this.player.radius + key.radius) {
+        this.player.addKey(key.id);
+        return false;
+      }
+      return true;
+    });
+
     this.checkRooms();
+    this.updateTimer();
   }
 
   gameLoop() {
@@ -327,5 +364,20 @@ export class Game {
 
   getCurrentRoom() {
     return Rooms[this.roomPosition[0]][this.roomPosition[1]];
+  }
+
+  pauseTimer() {
+    this.isGameRunning = false;
+  }
+
+  resumeTimer() {
+    this.isGameRunning = true;
+    this.startTime = Date.now() - this.elapsedTime;
+  }
+
+  resetTimer() {
+    this.startTime = Date.now();
+    this.elapsedTime = 0;
+    this.isGameRunning = true;
   }
 }
