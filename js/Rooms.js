@@ -171,7 +171,7 @@ const defaultRoom04 = {
     visited: 0
 };
 
-const defaultRoom05 = {
+const defaultRoom14 = {
     background: "/rooms/room3.png",
     travel: {
         up: { type: "door", open: 0, openreq: 4, shotcount: 0 },
@@ -181,7 +181,6 @@ const defaultRoom05 = {
     },
     enemies: [
         EnemyFactory.createEnemy('attacker', 150, 100),
-        EnemyFactory.createEnemy('attacker', 500, 500),
         EnemyFactory.createEnemy('attacker', 200, 400),
         EnemyFactory.createEnemy('regular', 300, 100),
     ],
@@ -192,10 +191,72 @@ const defaultRoom05 = {
     visited: 0
 };
 
-export const startIndex = [3, 2];
+const defaultRoom05 = {
+    background: "/rooms/room2.png",
+    travel: {
+        up: { type: "door", open: 0, openreq: 4, shotcount: 0 },
+        down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
+        left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "wall", open: 0, openreq: 7, shotcount: 0 },
+    },
+    enemies: [
+        EnemyFactory.createEnemy('regular', 400, 200),
+        EnemyFactory.createEnemy('attacker', 250, 500),
+        EnemyFactory.createEnemy('regular', 200, 200)
+    ],
+    projectiles: [],
+    coins: [],
+    keys: [],
+    type: "regular",
+    visited: 0
+};
+
+const storeRoom15 = {
+    background: "/rooms/store.png",
+    travel: {
+        up: { type: "wall", open: 0, openreq: 4, shotcount: 0 },
+        down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
+        left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "door", open: 1, openreq: 0, shotcount: 0 },
+    },
+    enemies: [
+
+    ],
+    projectiles: [],
+    coins: [],
+    keys: [],
+    type: "shop",
+    powerUps: [['doubleshot', 8, 'Double Shot', 'Get another gun to shoot from!'], ['extrahealth', 5, 'Extra Health', 'Increases your maximum health!']],
+    bought: [0,0],
+    visited: 0
+};
+
+const defaultRoom25 = {
+    background: "/rooms/room2.png",
+    travel: {
+        up: { type: "door", open: 0, openreq: 8, shotcount: 0 },
+        down: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        left: { type: "door", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "wall", open: 0, openreq: 7, shotcount: 0 },
+    },
+    enemies: [
+        EnemyFactory.createEnemy('regular', 150, 100),
+        EnemyFactory.createEnemy('regular', 400, 100),
+        EnemyFactory.createEnemy('regular', 250, 500),
+        EnemyFactory.createEnemy('regular', 300, 200)
+    ],
+    projectiles: [],
+    coins: [],
+    keys: [],
+    type: "regular",
+    visited: 0
+};
+
+export const startIndex = [4, 2];
 
 export const Rooms = [
-    [defaultRoom04, defaultRoom05, nullTile],
+    [defaultRoom05, storeRoom15, defaultRoom25],
+    [defaultRoom04, defaultRoom14, nullTile],
     [tutorialRoom3, shopRoom, emptyRoom],
     [nullTile, nullTile, tutorialRoom2],
     [nullTile, nullTile, tutorialRoom]

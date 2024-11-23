@@ -1,22 +1,8 @@
 export class Music {
     constructor() {
         this.tracks = [
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
-            '../assets/track1.mp3',
-            '../assets/track2.mp3',
+            '../assets/Counterspell.mp3',
+
         ];
 
         this.currentTrackIndex = 0;

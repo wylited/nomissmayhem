@@ -4,7 +4,7 @@ import { Projectile } from './Projectile.js';
 
 // Base Enemy class
 export class Enemy {
-    constructor(x, y, id, key=false, radius =20) {
+    constructor(x, y, id, key=false, healing=false, radius =20) {
         this.x = x;
         this.y = y;
         this.radius = radius;
