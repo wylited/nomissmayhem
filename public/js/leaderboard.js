@@ -1,7 +1,7 @@
 export class Leaderboard {
     constructor() {
         this.leaderboardElement = document.getElementById('leaderboard-entries');
-        this.updateInterval = 5000; // Update every 5 seconds
+        this.updateInterval = 1000; // Update every 5 seconds
         this.startUpdating();
     }
 
@@ -13,7 +13,7 @@ export class Leaderboard {
             this.leaderboardElement.innerHTML = leaderboardData
                 .map((entry, index) => `
                     <div class="leaderboard-entry">
-                        ${index + 1}. ${entry.name} - ${entry.score} coins (${entry.time})
+                        ${index + 1}. ${entry.name} - ${entry.score} points (${entry.time})
                     </div>
                 `)
                 .join('');
@@ -29,4 +29,4 @@ export class Leaderboard {
         // Set up periodic updates
         setInterval(() => this.updateLeaderboard(), this.updateInterval);
     }
-} 
+}
