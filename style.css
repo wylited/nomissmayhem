@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background: #000;
+}
+
+#gameCanvas {
+    background: #111;
+}
+
+.noselect {
+    user-select: none;
+    -webkit-user-selects: none;
+}
+
+#score {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+}
