@@ -19,9 +19,9 @@ const player = {
   x: canvas.width / 2,
   y: canvas.height / 2,
   radius: 20,
-  speed: 5,
+  speed: 1,
   maxSpeed: 5,
-  friction: 0.85,
+  friction: 0.96,
   dx: 0,
   dy: 0,
   isInvulnerable: false,
@@ -29,8 +29,8 @@ const player = {
   canDash: true,
   isDashing: false,
   dashCooldown: 2000,
-  dashPower: 100,
-  dashDuration: 200,
+  dashDistance: 150, // New property: how far the dash will take you
+  dashDuration: 100, // Reduced duration for snappier feel
   trailPositions: []
 };
 
@@ -101,8 +101,14 @@ function handleCollision() {
 function handleDash() {
   if (player.canDash && keys.shift) {
     const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
-    player.dx = Math.cos(angle) * player.dashPower;
-    player.dy = Math.sin(angle) * player.dashPower;
+
+    // Calculate new position after dash
+    const newX = player.x + Math.cos(angle) * player.dashDistance;
+    const newY = player.y + Math.sin(angle) * player.dashDistance;
+
+    // Ensure the new position doesn't go outside the canvas
+    player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, newX));
+    player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, newY));
 
     player.canDash = false;
     player.isDashing = true;
@@ -120,7 +126,6 @@ function handleDash() {
 }
 
 function updatePlayerPosition() {
-  // Store position for trail
   player.trailPositions.unshift({ x: player.x, y: player.y });
   if (player.trailPositions.length > 5) {
     player.trailPositions.pop();
@@ -168,7 +173,50 @@ function updatePlayerPosition() {
 function drawMotionBlur() {
   blurCtx.clearRect(0, 0, blurCanvas.width, blurCanvas.height);
 
-  if (player.isDashing || Math.abs(player.dx) > 3 || Math.abs(player.dy) > 3) {
+  // Create gradient trail during dash
+  if (player.isDashing) {
+    // Draw elongated trail
+    const startX = player.trailPositions[player.trailPositions.length - 1]?.x || player.x;
+    const startY = player.trailPositions[player.trailPositions.length - 1]?.y || player.y;
+    const gradient = blurCtx.createLinearGradient(
+      startX,
+      startY,
+      player.x,
+      player.y
+    );
+
+    gradient.addColorStop(0, 'rgba(68, 136, 255, 0)');
+    gradient.addColorStop(0.5, 'rgba(68, 136, 255, 0.3)');
+    gradient.addColorStop(1, 'rgba(68, 136, 255, 0.6)');
+
+    blurCtx.beginPath();
+    blurCtx.moveTo(startX, startY);
+
+    // Create curved path through trail positions
+    if (player.trailPositions.length > 1) {
+      for (let i = player.trailPositions.length - 2; i >= 0; i--) {
+        const pos = player.trailPositions[i];
+        blurCtx.lineTo(pos.x, pos.y);
+      }
+    }
+
+    blurCtx.lineTo(player.x, player.y);
+    blurCtx.lineWidth = player.radius * 2;
+    blurCtx.strokeStyle = gradient;
+    blurCtx.lineCap = 'round';
+    blurCtx.lineJoin = 'round';
+    blurCtx.stroke();
+
+    // Add glowing orbs along the trail
+    player.trailPositions.forEach((pos, index) => {
+      const alpha = (1 - index / player.trailPositions.length) * 0.4;
+      blurCtx.beginPath();
+      blurCtx.arc(pos.x, pos.y, player.radius * 1.2, 0, Math.PI * 2);
+      blurCtx.fillStyle = `rgba(68, 136, 255, ${alpha})`;
+      blurCtx.fill();
+    });
+  } else if (Math.abs(player.dx) > 3 || Math.abs(player.dy) > 3) {
+    // Regular motion blur for fast movement
     player.trailPositions.forEach((pos, index) => {
       const alpha = (1 - index / player.trailPositions.length) * 0.2;
       blurCtx.beginPath();
