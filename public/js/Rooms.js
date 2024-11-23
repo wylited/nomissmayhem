@@ -236,7 +236,7 @@ const storeRoom15 = {
     coins: [],
     keys: [],
     type: "shop",
-    powerUps: [['super', 8, 'Super Shot', 'Hold down to shoot continuously!'], ['extrahealth', 5, 'Extra Health', 'Increases your maximum health!']],
+    powerUps: [['super', 8, 'Super Shot', 'Removes all shooting cooldown!'], ['extrahealth', 5, 'Extra Health', 'Increases your maximum health!']],
     bought: [0,0],
     health:[],
     visited: 0
@@ -245,7 +245,7 @@ const storeRoom15 = {
 const defaultRoom06 = {
     background: "/rooms/room2.png",
     travel: {
-        up: { type: "door   ", open: 0, openreq: 8, shotcount: 0 },
+        up: { type: "door", open: 0, openreq: 8, shotcount: 0 },
         down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
         left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
         right: { type: "wall", open: 0, openreq: 7, shotcount: 0 },
