@@ -68,6 +68,7 @@ const shopRoom = {
     projectiles: [],
     coins: [],
     type: "shop",
+    keys: [],
     powerUps: ['extraballs', 'extrahealth']
 };
 
@@ -84,6 +85,7 @@ const nullTile = {
     ],
     projectiles: [],
     coins: [],
+    keys: [],
     type: "regular"
 };
 
