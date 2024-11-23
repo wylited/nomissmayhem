@@ -7,7 +7,7 @@ export function checkCardCollision(room, proj) {
 
     let x = proj.x;
     let y = proj.y;
-    
+    console.log(x, y)
     if (x > 348 && x < 492 && y > 33 && y < 237) {
         return [1, room.powerUps[1]];
     }

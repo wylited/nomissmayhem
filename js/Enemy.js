@@ -8,7 +8,7 @@ export class Enemy {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.speed = 1.3;
+        this.speed = 1;
         this.health = 100;
         this.type = 'regular';
         this.isActive = true;

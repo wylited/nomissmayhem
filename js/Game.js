@@ -342,7 +342,7 @@ export class Game {
           }
           break;
       }
-
+      console.log('checking')
       res = checkCardCollision(this.getCurrentRoom(), proj);
 
       if (res) {
