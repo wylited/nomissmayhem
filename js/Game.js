@@ -1,9 +1,10 @@
-import { CANVAS, BULLETS_LIMITER } from './constants.js'; // Import BULLETS_PER_SECOND
 import { Player } from './Player.js';
 import { Projectile } from './Projectile.js';
 import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
 import { Music } from './Music.js';
+import { EnemyFactory } from './Enemy.js';
+import { CANVAS, BULLETS_LIMITER } from './constants.js';
 
 export class Game {
   constructor() {
@@ -15,8 +16,9 @@ export class Game {
     this.music = new Music();
 
     this.player = new Player(CANVAS.WIDTH / 2, CANVAS.HEIGHT / 2);
-    this.renderer = new Renderer(this.canvas, this.blurCanvas);
+    this.enemies = [];
     this.projectiles = [];
+    this.renderer = new Renderer(this.canvas, this.blurCanvas);
     this.hitCount = 0;
     this.mouseX = 0;
     this.mouseY = 0;
@@ -30,6 +32,9 @@ export class Game {
 
     this.lastBulletTime = 0; // Track last bullet firing time
     this.bulletCooldown = 1000 / BULLETS_LIMITER; // Cooldown in milliseconds based on bullets per second
+
+    this.enemies.push(EnemyFactory.createEnemy('regular', CANVAS.WIDTH / 2 + 50, CANVAS.HEIGHT / 2 + 50));
+    this.enemies.push(EnemyFactory.createEnemy('attacker', CANVAS.WIDTH / 2 - 50, CANVAS.HEIGHT / 2 - 50));
 
     this.setup();
   }
@@ -129,28 +134,57 @@ export class Game {
     }
   }
 
-  update() {
-    this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
+    update() {
+        this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
 
-    for (let i = this.projectiles.length - 1; i >= 0; i--) {
-      const proj = this.projectiles[i];
-      const shouldRemove = proj.update();
+        // Update enemies
+        this.enemies.forEach((enemy, index) => {
+            if (enemy.isActive) {
+                const enemyProjectile = enemy.update(this.player, Date.now());
 
-      if (shouldRemove) {
-        this.projectiles.splice(i, 1);
-        continue;
-      }
+                // If enemy fired a projectile, add it to projectiles array
+                if (enemyProjectile) {
+                    this.projectiles.push(enemyProjectile);
+                }
 
-      if (proj.canHurt && checkCollision(this.player, proj)) {
-        this.handleCollision();
-        this.projectiles.splice(i, 1);
-      }
+                // Check collision with player
+                if (enemy.checkCollision(this.player)) {
+                    this.handleCollision();
+                }
+
+                // Check collision with player's projectiles
+                this.projectiles.forEach((proj, projIndex) => {
+                    if (!proj.isEnemyProjectile && checkCollision(enemy, proj)) {
+                        enemy.takeDamage(20);
+                        this.projectiles.splice(projIndex, 1);
+                    }
+                });
+            } else {
+                this.enemies.splice(index, 1);
+            }
+        });
+
+        // Update projectiles
+        for (let i = this.projectiles.length - 1; i >= 0; i--) {
+            const proj = this.projectiles[i];
+            const shouldRemove = proj.update();
+
+            if (shouldRemove) {
+                this.projectiles.splice(i, 1);
+                continue;
+            }
+
+            // Only check player collision with enemy projectiles
+            if (proj.isEnemyProjectile && checkCollision(this.player, proj)) {
+                this.handleCollision();
+                this.projectiles.splice(i, 1);
+            }
+        }
     }
-  }
 
   gameLoop() {
     this.update();
-    this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY);
+    this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY, this.enemies); // Add enemies to render
     requestAnimationFrame(() => this.gameLoop());
   }
 }
