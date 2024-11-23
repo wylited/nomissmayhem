@@ -140,7 +140,7 @@ export class Game {
       return true;
     }
 
-    if (door.type=='door' && door.shotcount > door.openreq) {
+    if (door.type=='door' && door.shotcount >= door.openreq) {
       console.log('UNLOCK')
       return true;
     }
