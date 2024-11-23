@@ -4,10 +4,8 @@ export class Renderer {
     this.blurCanvas = blurCanvas;
     this.ctx = canvas.getContext('2d');
     this.blurCtx = blurCanvas.getContext('2d');
-    
-    
-
   }
+
   drawBackground() {
     this.bgImg = new Image();
     this.bgImg.src = "/assets/rooms/room1.png";
@@ -53,14 +51,7 @@ export class Renderer {
 
       player.trailPositions.forEach((pos, index) => {
         const alpha = (1 - index / player.trailPositions.length) * 0.4;
-        this.blurCtx.begi
-        /* Tainted canvas can not get pixel data on cross origin image (from cdn.playbuzz.com to stackoverflow.com)
-        var img = document.createElement("img");
-        img.src = ctx.canvas.toDataURL();
-        img.addEventListener("load", () => {
-              show_img_here.appendChild(img);
-        }, {once: true});
-         nPath();*/
+        this.blurCtx.beginPath();
 
         this.blurCtx.arc(pos.x, pos.y, player.radius * 1.2, 0, Math.PI * 2);
         this.blurCtx.fillStyle = `rgba(68, 136, 255, ${alpha})`;
@@ -76,19 +67,21 @@ export class Renderer {
       });
     }
   }
-  
-  render(player, projectiles, mouseX, mouseY, imgsrc, enemies) {
-    // Clear the entire canvas
+
+  render(player, room, mouseX, mouseY) {
+    let enemies = room.enemies;
+    let projectiles = room.projectiles;
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.bgImg = new Image();
-    this.bgImg.src = '/assets/' + imgsrc;
+    this.bgImg.src = '/assets' + room.background;
+
     // Draw background first if loaded
     this.ctx.drawImage(this.bgImg, 0, 0, this.canvas.width, this.canvas.height);
-    
+
     // Add overlay effect
     this.ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    
 
     this.drawMotionBlur(player);
 
@@ -118,33 +111,34 @@ export class Renderer {
     this.ctx.lineWidth = 2;
     this.ctx.stroke();
 
-    // Draw enemies
-    enemies.forEach(enemy => {
-      if (enemy.isActive) {
+    // Add null check for enemies
+    if (enemies && enemies.length > 0) {
+      enemies.forEach(enemy => {
+        if (enemy.isActive) {
+          this.ctx.beginPath();
+          this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = enemy.color;
+          this.ctx.fill();
+          this.ctx.closePath();
+
+          // Draw health bar
+          this.ctx.fillStyle = 'red';
+          this.ctx.fillRect(enemy.x - 25, enemy.y - enemy.radius - 10, 50, 5);
+          this.ctx.fillStyle = 'green';
+          this.ctx.fillRect(enemy.x - 25, enemy.y - enemy.radius - 10, (enemy.health / 100) * 50, 5);
+        }
+      });
+    }
+
+    // Add null check for projectiles
+    if (projectiles && projectiles.length > 0) {
+      projectiles.forEach(proj => {
         this.ctx.beginPath();
-        this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-        this.ctx.fillStyle = enemy.color;
+        this.ctx.arc(proj.x, proj.y, proj.radius, 0, Math.PI * 2);
+        const bounceColor = 255 - (proj.bounces * 60);
+        this.ctx.fillStyle = `rgb(255, ${bounceColor}, ${bounceColor})`;
         this.ctx.fill();
-        this.ctx.closePath();
-
-        // Draw health bar
-        this.ctx.fillStyle = 'red';
-        this.ctx.fillRect(enemy.x - 25, enemy.y - enemy.radius - 10, 50, 5);
-        this.ctx.fillStyle = 'green';
-        this.ctx.fillRect(enemy.x - 25, enemy.y - enemy.radius - 10, (enemy.health / 100) * 50, 5);
-      }
-    });
-
-
-    // Draw projectiles
-    //console.log(projectiles);
-    projectiles.forEach(proj => {
-      
-      this.ctx.beginPath();
-      this.ctx.arc(proj.x, proj.y, proj.radius, 0, Math.PI * 2);
-      const bounceColor = 255 - (proj.bounces * 60);
-      this.ctx.fillStyle = `rgb(255, ${bounceColor}, ${bounceColor})`;
-      this.ctx.fill();
-    });
+      });
+    }
   }
 }

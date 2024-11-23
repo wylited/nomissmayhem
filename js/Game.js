@@ -18,10 +18,9 @@ export class Game {
     this.music = new Music();
 
     this.player = new Player(CANVAS.WIDTH / 2, CANVAS.HEIGHT / 2);
-    this.enemies = [];
-    this.projectiles = [];
     this.renderer = new Renderer(this.canvas, this.blurCanvas);
     this.roomPosition = startIndex;
+
     this.hitCount = 0;
     this.mouseX = 0;
     this.mouseY = 0;
@@ -32,9 +31,6 @@ export class Game {
       d: false,
       shift: false,
     };
-
-    this.enemies.push(EnemyFactory.createEnemy('regular', CANVAS.WIDTH / 2 + 50, CANVAS.HEIGHT / 2 + 50));
-    this.enemies.push(EnemyFactory.createEnemy('attacker', CANVAS.WIDTH / 2 - 50, CANVAS.HEIGHT / 2 - 50));
 
     this.setup();
   }
@@ -117,7 +113,7 @@ export class Game {
         const canvasY = e.clientY - rect.top;
 
         const angle = Math.atan2(canvasY - this.player.y, canvasX - this.player.x);
-        this.projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
+        this.getCurrentRoom().projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
 
         this.lastBulletTime = currentTime; // Update the last bullet firing time
       }
@@ -153,7 +149,7 @@ export class Game {
     //up
     if (this.player.y < 25 && this.player.x < 350 && this.player.x > 250 ) {
       //console.log(this.roomPosition[0]);
-      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.up
+      let status = this.getCurrentRoom().travel.up
       let bool = this.checkDoor(status);
 
       status.open = bool;
@@ -167,7 +163,7 @@ export class Game {
     //down
     if (this.player.y > 575 && this.player.x < 350 && this.player.x > 250 ) {
       //console.log(this.roomPosition[0]);
-      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.down
+      let status = this.getCurrentRoom().travel.down
       let bool = this.checkDoor(status);
 
       status.open = bool;
@@ -181,7 +177,7 @@ export class Game {
     //right
     if (this.player.x > 575 && this.player.y < 350 && this.player.y > 250 ) {
       //console.log(this.roomPosition[0]);
-      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.right
+      let status = this.getCurrentRoom().travel.right
       let bool = this.checkDoor(status);
 
       status.open = bool;
@@ -195,7 +191,7 @@ export class Game {
     //left
     if (this.player.x < 25 && this.player.y < 350 && this.player.y > 250 ) {
       //console.log(this.roomPosition[0]);
-      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.left
+      let status = this.getCurrentRoom().travel.left
       let bool = this.checkDoor(status);
 
       status.open = bool;
@@ -210,61 +206,70 @@ export class Game {
     this.canvas.width
   }
 
-    update() {
-        this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
+  update() {
+    this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
 
-        // Update enemies
-        this.enemies.forEach((enemy, index) => {
-            if (enemy.isActive) {
-                const enemyProjectile = enemy.update(this.player, Date.now());
+    // Update enemies
+    this.getCurrentRoom().enemies.forEach((enemy, index) => {
+      if (enemy.isActive) {
+        const enemyProjectile = enemy.update(this.player, Date.now());
 
-                // If enemy fired a projectile, add it to projectiles array
-                if (enemyProjectile) {
-                    this.projectiles.push(enemyProjectile);
-                }
-
-                // Check collision with player
-                if (enemy.checkCollision(this.player)) {
-                    this.handleCollision();
-                }
-
-                // Check collision with player's projectiles
-                this.projectiles.forEach((proj, projIndex) => {
-                    if (!proj.isEnemyProjectile && checkCollision(enemy, proj)) {
-                        enemy.takeDamage(20);
-                        this.projectiles.splice(projIndex, 1);
-                    }
-                });
-            } else {
-                this.enemies.splice(index, 1);
-            }
-        });
-
-        // Update projectiles
-        for (let i = this.projectiles.length - 1; i >= 0; i--) {
-            const proj = this.projectiles[i];
-            const shouldRemove = proj.update();
-
-            if (shouldRemove) {
-                this.projectiles.splice(i, 1);
-                continue;
-            }
-
-            // Only check player collision with enemy projectiles
-            if (checkCollision(this.player, proj)) {
-                this.handleCollision();
-                this.projectiles.splice(i, 1);
-            }
+        // If enemy fired a projectile, add it to projectiles array
+        if (enemyProjectile) {
+          this.getCurrentRoom().projectiles.push(enemyProjectile);
         }
-  
+
+        // Check collision with player
+        if (enemy.checkCollision(this.player)) {
+          this.handleCollision();
+        }
+
+        // Check collision with player's projectiles
+        this.getCurrentRoom().projectiles.forEach((proj, projIndex) => {
+          if (!proj.isEnemyProjectile && checkCollision(enemy, proj)) {
+            enemy.takeDamage(20);
+            this.getCurrentRoom().projectiles.splice(projIndex, 1);
+          }
+        });
+      } else {
+        this.getCurrentRoom().enemies.splice(index, 1);
+      }
+    });
+
+    // Update projectiles
+    for (let i = this.getCurrentRoom().projectiles.length - 1; i >= 0; i--) {
+      const proj = this.getCurrentRoom().projectiles[i];
+      const shouldRemove = proj.update();
+
+      if (shouldRemove) {
+        this.getCurrentRoom().projectiles.splice(i, 1);
+        continue;
+      }
+
+      // Only check player collision with enemy projectiles
+      if (checkCollision(this.player, proj)) {
+        this.handleCollision();
+        this.getCurrentRoom().projectiles.splice(i, 1);
+      }
+    }
+
     this.checkRooms();
   }
 
   gameLoop() {
     this.update();
-    //console.log(this.projectiles);
-    //console.log(Rooms[this.roomPosition[0]][this.roomPosition[1]].background);
-    this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY, Rooms[this.roomPosition[0]][this.roomPosition[1]].background, this.enemies); // Add enemies to render
+    //console.log(this.getCurrentRoom().projectiles);
+
+    this.renderer.render(this.player,
+                         this.getCurrentRoom(),
+                         this.mouseX,
+                         this.mouseY,
+                        ); // Add enemies to render
+
     requestAnimationFrame(() => this.gameLoop());
+  }
+
+  getCurrentRoom() {
+    return Rooms[this.roomPosition[0]][this.roomPosition[1]];
   }
 }
