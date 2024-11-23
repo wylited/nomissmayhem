@@ -159,7 +159,7 @@ export class Game {
       
       if (bool) {
         this.roomPosition[0] -= 1;
-        this.player.y = 580
+        this.player.y = 560
         this.player.x = 300
       }
     }
@@ -173,7 +173,7 @@ export class Game {
       
       if (bool) {
         this.roomPosition[0] += 1;
-        this.player.y = 20
+        this.player.y = 40
         this.player.x = 300
       }
     }
@@ -187,7 +187,7 @@ export class Game {
       
       if (bool) {
         this.roomPosition[1] += 1;
-        this.player.x = 20
+        this.player.x = 40
         this.player.y = 300
       }
     }
@@ -201,7 +201,7 @@ export class Game {
       
       if (bool) {
         this.roomPosition[1] -= 1;
-        this.player.x = 580
+        this.player.x = 560
         this.player.y = 300
       }
     }
