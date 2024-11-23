@@ -2,6 +2,7 @@ import { Player } from './Player.js';
 import { Projectile } from './Projectile.js';
 import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
+import { Rooms, startIndex } from './Rooms.js';
 import { Music } from './Music.js';
 import { EnemyFactory } from './Enemy.js';
 import { CANVAS, BULLETS_LIMITER } from './constants.js';
@@ -29,9 +30,6 @@ export class Game {
       d: false,
       shift: false,
     };
-
-    this.lastBulletTime = 0; // Track last bullet firing time
-    this.bulletCooldown = 1000 / BULLETS_LIMITER; // Cooldown in milliseconds based on bullets per second
 
     this.enemies.push(EnemyFactory.createEnemy('regular', CANVAS.WIDTH / 2 + 50, CANVAS.HEIGHT / 2 + 50));
     this.enemies.push(EnemyFactory.createEnemy('attacker', CANVAS.WIDTH / 2 - 50, CANVAS.HEIGHT / 2 - 50));
@@ -82,6 +80,7 @@ export class Game {
       canvas.style.left = '50%';
       canvas.style.top = '50%';
       canvas.style.transform = 'translate(-50%, -50%)';
+      //canvas.style.backgroundImage = "url('/assets/rooms/room1.png')";
     });
   }
 
@@ -134,6 +133,37 @@ export class Game {
     }
   }
 
+  checkDoor(door) {
+    if ((door.type=='door' || door.type=='shoot') && door.open==1) {
+      return true;
+    }
+
+    if (door.type=='shoot' && door.shotcount > door.openreq) {
+      return true;
+    }
+  }
+
+  checkRooms() {
+    //console.log(this.player.x, this.player.y);
+    const midpoint = [this.canvas.width/2, this.canvas.height/2];
+
+    if (this.player.y < 25 && this.player.x < 350 && this.player.x > 250 ) {
+      console.log(this.roomPosition[0]);
+      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.up
+      let bool = this.checkDoor(status);
+
+      status.open = bool;
+      
+      if (bool) {
+        this.roomPosition[0] -= 1;
+        this.player.y = 580
+        this.player.x = 300
+      }
+    }
+    
+    this.canvas.width
+  }
+
     update() {
         this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
 
@@ -180,11 +210,14 @@ export class Game {
                 this.projectiles.splice(i, 1);
             }
         }
-    }
+  
+    this.checkRooms();
+  }
 
   gameLoop() {
     this.update();
-    this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY, this.enemies); // Add enemies to render
+    console.log(Rooms[this.roomPosition[0]][this.roomPosition[1]].background);
+    this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY, Rooms[this.roomPosition[0]][this.roomPosition[1]].background, this.enemies); // Add enemies to render
     requestAnimationFrame(() => this.gameLoop());
   }
 }
