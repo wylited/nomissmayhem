@@ -155,12 +155,18 @@ export class Game {
     if ((door.type=='door') && door.open==1) {
       return true;
     }
+    console.log(this.player.keys)
+
+    if ((door.type=='key') && this.player.keys.includes("key1")) {
+      return true;
+    }
 
     if (door.type=='door' && door.shotcount >= door.openreq) {
       //console.log('UNLOCK')
 
       return true;
     }
+
     return false;
   }
 

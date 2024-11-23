@@ -288,35 +288,49 @@ export class Renderer {
     this.ctx.fillStyle = 'red'; // door colour
     if (room.travel.up.type=='door') {
       if (room.travel.up.openreq > room.travel.up.shotcount) {
-        this.ctx.fillStyle = 'red'; 
+        this.ctx.fillStyle = 'red';
       } else {
-        this.ctx.fillStyle = 'green'; 
+        this.ctx.fillStyle = 'green';
       }
       this.ctx.fillRect(260, 0, 80, 20);
+    } else if (room.travel.up.type=='key') {
+      this.ctx.fillStyle = 'yellow';
+      this.ctx.fillRect(260, 0, 80, 20);
     }
+
     if (room.travel.down.type=='door') {
       if (room.travel.down.openreq > room.travel.down.shotcount) {
-        this.ctx.fillStyle = 'red'; 
+        this.ctx.fillStyle = 'red';
       } else {
-        this.ctx.fillStyle = 'green'; 
+        this.ctx.fillStyle = 'green';
       }
       this.ctx.fillRect(260, 580, 80, 20);
+    } else if (room.travel.down.type=='key') {
+      this.ctx.fillStyle = 'yellow';
+      this.ctx.fillRect(260, 580, 80, 20);
     }
+
     if (room.travel.left.type=='door') {
       if (room.travel.left.openreq > room.travel.left.shotcount) {
-        this.ctx.fillStyle = 'red'; 
+        this.ctx.fillStyle = 'red';
       } else {
-        this.ctx.fillStyle = 'green'; 
+        this.ctx.fillStyle = 'green';
       }
       this.ctx.fillRect(0, 260, 20, 80);
+    } else if (room.travel.left.type=='key') {
+      this.ctx.fillStyle = 'yellow';
+      this.ctx.fillRect(0, 260, 20, 80);
     }
+
     if (room.travel.right.type=='door') {
       if (room.travel.right.openreq > room.travel.right.shotcount) {
-        this.ctx.fillStyle = 'red'; 
+        this.ctx.fillStyle = 'red';
       } else {
-        this.ctx.fillStyle = 'green'; 
+        this.ctx.fillStyle = 'green';
       }
       this.ctx.fillRect(580, 260, 20, 80);
-    }
-  }
+    } else if (room.travel.right.type=='key') {
+      this.ctx.fillStyle = 'yellow';
+      this.ctx.fillRect(580, 260, 20, 80);
+    }}
 }

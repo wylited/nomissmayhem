@@ -126,7 +126,7 @@ const tutorialRoom2 = {
         right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('regular', 150, 100, 'true', false, true)
+        EnemyFactory.createEnemy('regular', 150, 100, 'key1', true, true)
     ],
     projectiles: [],
     coins: [],
@@ -294,7 +294,7 @@ const keyRoom = {
     },
     enemies: [
         EnemyFactory.createEnemy('attacker', 150, 100), 
-        EnemyFactory.createEnemy('regular', 400, 100, '', true, true, 50, 500),
+        EnemyFactory.createEnemy('regular', 400, 100,'key1', true, true, 50, 500),
         EnemyFactory.createEnemy('attacker', 250, 500),
         EnemyFactory.createEnemy('attacker', 300, 200)
     ],
@@ -305,6 +305,29 @@ const keyRoom = {
     type: "regular",
     visited: 0
 };
+
+
+const keyedRoom = {
+    background: "/rooms/room1.png",
+    travel: {
+        up: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        down: { type: "wall", open: 0, openreq: 0, shotcount: 0 },
+        left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+    },
+    enemies: [
+        EnemyFactory.createEnemy('regular', 150, 100),
+        EnemyFactory.createEnemy('regular', 400, 100),
+        EnemyFactory.createEnemy('attacker', 400, 100)
+    ],
+    projectiles: [],
+    coins: [],
+    keys: [],
+    health:[],
+    type: "regular",
+    visited: 0
+};
+
 
 export const startIndex = [6, 2];
 
