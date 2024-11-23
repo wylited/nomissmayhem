@@ -22,7 +22,7 @@ const emptyRoom = {
         up: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
         down: { type: "door", open: 1, openreq: 0, shotcount: 0 },
         left: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
-        right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "door", open: 1, openreq: 0, shotcount: 0 },
     },
     enemies: [
         EnemyFactory.createEnemy('regular', 150, 100),
@@ -31,9 +31,23 @@ const emptyRoom = {
     projectiles: [],
 };
 
+const testRoom = {
+    background: "/rooms/room3.png",
+    travel: {
+        up: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        down: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+        left: { type: "door", open: 1, openreq: 0, shotcount: 0 },
+        right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
+    },
+    enemies: [
+        EnemyFactory.createEnemy('regular', 150, 100),
+    ],
+    projectiles: [],
+};
+
 export const startIndex = [1, 0];
 
 export const Rooms = [
-    [emptyRoom],
+    [emptyRoom, testRoom],
     [startRoom],
 ];

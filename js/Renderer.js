@@ -80,7 +80,7 @@ export class Renderer {
     this.ctx.drawImage(this.bgImg, 0, 0, this.canvas.width, this.canvas.height);
 
     // Add overlay effect
-    this.ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
+    this.ctx.fillStyle = "rgba(200, 0.5, 0.5, 0.5)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawMotionBlur(player);
@@ -139,6 +139,19 @@ export class Renderer {
         this.ctx.fillStyle = `rgb(255, ${bounceColor}, ${bounceColor})`;
         this.ctx.fill();
       });
+    }
+    this.ctx.fillStyle = 'red'; // door colour
+    if (room.travel.up.type=='door') {
+      this.ctx.fillRect(260, 0, 80, 20);
+    }
+    if (room.travel.down.type=='door') {
+      this.ctx.fillRect(260, 580, 80, 20);
+    }
+    if (room.travel.left.type=='door') {
+      this.ctx.fillRect(0, 260, 20, 80);
+    }
+    if (room.travel.right.type=='door') {
+      this.ctx.fillRect(580, 260, 20, 80);
     }
   }
 }
