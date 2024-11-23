@@ -13,6 +13,8 @@ export const PLAYER = {
   DASH_COOLDOWN: 2000,
   DASH_DISTANCE: 100,
   DASH_DURATION: 200,
+  MAX_HEALTH: 100,
+  DAMAGE_PER_HIT: 10,
 };
 
 export const PROJECTILE = {

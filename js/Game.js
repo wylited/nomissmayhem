@@ -5,7 +5,7 @@ import { checkCollision } from './utils.js';
 import { Rooms, startIndex, checkDoorCollision } from './Rooms.js';
 import { Music } from './Music.js';
 import { Key } from './Key.js';
-import { CANVAS, BULLETS_LIMITER } from './constants.js';
+import { CANVAS, BULLETS_LIMITER, PLAYER } from './constants.js';
 import { Coin } from './Coin.js';
 import { checkCardCollision } from './Store.js';
 
@@ -129,10 +129,15 @@ export class Game {
   }
 
   handleCollision() {
-    console.log(this.player.isInvulnerable);
     if (!this.player.isInvulnerable) {
-      this.hitCount++;
-      this.scoreElement.textContent = `Hits: ${this.hitCount}`;
+      this.player.health -= PLAYER.DAMAGE_PER_HIT;
+      this.scoreElement.textContent = `Health: ${this.player.health}`;
+
+      // Check if player has died
+      if (this.player.health <= 0) {
+        this.gameOver();
+        return;
+      }
 
       this.player.isInvulnerable = true;
       setTimeout(() => {
@@ -367,14 +372,14 @@ export class Game {
   }
 
   gameLoop() {
+    if (!this.isGameRunning) return; // Stop the game loop if game is over
+    
     this.update();
-    //console.log(this.getCurrentRoom().projectiles);
-
     this.renderer.render(this.player,
                          this.getCurrentRoom(),
                          this.mouseX,
                          this.mouseY,
-                        ); // Add enemies to render
+                        );
 
     requestAnimationFrame(() => this.gameLoop());
   }
@@ -396,5 +401,40 @@ export class Game {
     this.startTime = Date.now();
     this.elapsedTime = 0;
     this.isGameRunning = true;
+  }
+
+  gameOver() {
+    this.isGameRunning = false;
+    
+    // Create game over overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.top = '50%';
+    overlay.style.left = '50%';
+    overlay.style.transform = 'translate(-50%, -50%)';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    overlay.style.padding = '20px';
+    overlay.style.borderRadius = '10px';
+    overlay.style.textAlign = 'center';
+    overlay.style.zIndex = '1000';
+    
+    // Add game over text
+    const gameOverText = document.createElement('h1');
+    gameOverText.textContent = 'Game Over';
+    gameOverText.style.color = 'white';
+    overlay.appendChild(gameOverText);
+    
+    // Add retry button
+    const retryButton = document.createElement('button');
+    retryButton.textContent = 'Try Again';
+    retryButton.style.padding = '10px 20px';
+    retryButton.style.marginTop = '20px';
+    retryButton.style.cursor = 'pointer';
+    retryButton.onclick = () => {
+      location.reload(); // Reload the page to restart the game
+    };
+    overlay.appendChild(retryButton);
+    
+    document.body.appendChild(overlay);
   }
 }

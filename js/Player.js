@@ -21,6 +21,7 @@ export class Player {
     this.trailPositions = [];
     this.money = 0;
     this.keys = [];
+    this.health = PLAYER.MAX_HEALTH;
   }
 
   handleDash(mouseX, mouseY, dashElement) {

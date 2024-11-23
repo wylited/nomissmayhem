@@ -80,7 +80,7 @@ export class Renderer {
     this.ctx.drawImage(this.bgImg, 0, 0, this.canvas.width, this.canvas.height);
 
     // Add overlay effect
-    this.ctx.fillStyle = "rgba(200, 0.5, 0.5, 0.5)";
+    this.ctx.fillStyle = "rgba(200, 0.5, 0.5, 0)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawMotionBlur(player);
