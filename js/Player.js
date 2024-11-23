@@ -95,5 +95,8 @@ export class Player {
 
   addMoney(amount) {
     this.money += amount;
+    this.moneyElement = document.getElementById('money');
+    console.log(this.money)
+    this.moneyElement.textContent = `Money: ${this.money}`;
   }
 }

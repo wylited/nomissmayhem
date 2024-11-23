@@ -13,6 +13,7 @@ export class Game {
     this.canvas = document.getElementById('gameCanvas');
     this.blurCanvas = document.getElementById('blurCanvas');
     this.scoreElement = document.getElementById('score');
+    this.moneyElement = document.getElementById('money')
     this.dashElement = document.getElementById('dash');
     this.bulletCooldown = 200
     this.lastBulletTime = Date.now();

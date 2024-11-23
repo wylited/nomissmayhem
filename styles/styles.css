@@ -7,7 +7,7 @@ body {
 #fullscreen {
     width:100%;
     height:100vh;
-    background-color: 
+    background-color: black;
     gap: 4px;
 }
 
@@ -45,6 +45,15 @@ body {
 #dash {
     position: fixed;
     top: 50px;
+    left: 20px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+}
+
+#money {
+    position: fixed;
+    top: 80px;
     left: 20px;
     color: white;
     font-family: Arial, sans-serif;

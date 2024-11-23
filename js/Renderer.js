@@ -157,7 +157,6 @@ export class Renderer {
     // Draw money counter (optional)
     this.ctx.fillStyle = '#fff';
     this.ctx.font = '20px Arial';
-    this.ctx.fillText(`Money: ${player.money}`, 10, 30);
     this.ctx.fillStyle = 'red'; // door colour
     if (room.travel.up.type=='door') {
       if (room.travel.up.openreq > room.travel.up.shotcount) {
