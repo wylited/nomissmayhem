@@ -26,15 +26,21 @@ export function createMinimap(rooms, currentPosition) {
             .room.current {
                 background: #4CAF50;
             }
-            .room.shop {
+            .shop {
                 background: #2196F3;
             }
             .room.null {
-                background: transparent;
+                background: black;
             }
             .door {
                 position: absolute;
                 background: #FFC107;
+            }
+            .notVisited {
+                background: black;
+            }
+            .notVisitedDoor {
+                display: none;
             }
             .door.up { top: 0; left: 50%; width: 30%; height: 3px; transform: translateX(-50%); }
             .door.down { bottom: 0; left: 50%; width: 30%; height: 3px; transform: translateX(-50%); }
@@ -44,16 +50,16 @@ export function createMinimap(rooms, currentPosition) {
         <div class="minimap">
             ${rooms.map((row, i) => 
                 row.map((room, j) => {
-                    if (room === nullTile) {
+                    if (room.type === "nullTile") {
                         return `<div class="room null"></div>`;
                     }
                     
                     const isCurrentRoom = i === currentPosition[0] && j === currentPosition[1];
-                    const roomClass = `room ${isCurrentRoom ? 'current' : ''} ${room.type === 'shop' ? 'shop' : ''} visited`;
+                    const roomClass = `room ${isCurrentRoom ? 'current' : ''} ${room.type === 'shop' ? 'shop' : ''} ${room.visited ? 'visited' : 'notVisited'}`;
                     
                     const doors = ['up', 'down', 'left', 'right']
                         .filter(direction => room.travel[direction].type === 'door')
-                        .map(direction => `<div class="door ${direction}"></div>`)
+                        .map(direction => `<div class="door ${direction} ${room.visited ? 'visitedDoor' : 'notVisitedDoor'}"></div>`)
                         .join('');
                     
                     return `<div class="${roomClass}">${doors}</div>`;

@@ -155,6 +155,7 @@ export class Game {
 
     if (door.type=='door' && door.shotcount >= door.openreq) {
       console.log('UNLOCK')
+
       return true;
     }
     return false;
@@ -175,6 +176,8 @@ export class Game {
         this.roomPosition[0] -= 1;
         this.player.y = 560
         this.player.x = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     //down
@@ -189,6 +192,8 @@ export class Game {
         this.roomPosition[0] += 1;
         this.player.y = 40
         this.player.x = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     //right
@@ -203,6 +208,8 @@ export class Game {
         this.roomPosition[1] += 1;
         this.player.x = 40
         this.player.y = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     //left
@@ -217,6 +224,8 @@ export class Game {
         this.roomPosition[1] -= 1;
         this.player.x = 560
         this.player.y = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     
@@ -371,7 +380,7 @@ export class Game {
 
     this.checkRooms();
     this.updateTimer();
-  }
+  } 
 
   gameLoop() {
     if (!this.isGameRunning) return; // Stop the game loop if game is over

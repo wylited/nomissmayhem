@@ -16,7 +16,8 @@ const startRoom = {
     projectiles: [],
     coins: [],
     keys: [],
-    type: "regular"
+    type: "regular",
+    visited: 0
 };
 
 const emptyRoom = {
@@ -34,7 +35,8 @@ const emptyRoom = {
     projectiles: [],
     coins: [],
     keys: [],
-    type: "regular"
+    type: "regular",
+    visited: 0
 };
 
 const testRoom = {
@@ -51,7 +53,8 @@ const testRoom = {
     projectiles: [],
     coins: [],
     keys: [],
-    type: "regular"
+    type: "regular",
+    visited: 0
 };
 
 const shopRoom = {
@@ -70,7 +73,8 @@ const shopRoom = {
     type: "shop",
     keys: [],
     powerUps: [['extraballs', 2, 'Extra Balls', 'Increases the speed at which you can fire!'], ['extrahealth', 1, 'Extra Health', 'Increases your maximum health!']],
-    bought: [0, 0]
+    bought: [0, 0],
+    visited: 0
 };
 
 const nullTile = {
@@ -87,7 +91,8 @@ const nullTile = {
     projectiles: [],
     coins: [],
     keys: [],
-    type: "regular"
+    type: "nullTile",
+    visited: 0
 };
 
 const tutorialRoom = {
@@ -104,7 +109,8 @@ const tutorialRoom = {
     projectiles: [],
     coins: [],
     keys: [],
-    type: "regular"
+    type: "regular",
+    visited: 1
 };
 
 const tutorialRoom2 = {
@@ -121,7 +127,8 @@ const tutorialRoom2 = {
     projectiles: [],
     coins: [],
     keys: [],
-    type: "regular"
+    type: "regular",
+    visited: 0
 };
 
 export const startIndex = [2, 1];

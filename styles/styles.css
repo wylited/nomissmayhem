@@ -28,6 +28,11 @@ body {
     pointer-events: none;
 }
 
+#map {
+    position: absolute;
+    bottom:0;
+}
+
 .noselect {
     user-select: none;
     -webkit-user-select: none;
