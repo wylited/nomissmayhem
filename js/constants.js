@@ -17,7 +17,7 @@ export const PLAYER = {
 
 export const PROJECTILE = {
   SPEED: 5,
-  MAX_BOUNCES: 100,
+  MAX_BOUNCES: 10,
   RADIUS: 5
 };
 
