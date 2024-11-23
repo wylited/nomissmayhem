@@ -125,6 +125,7 @@ export class Game {
   }
 
   handleCollision() {
+    console.log(this.player.isInvulnerable);
     if (!this.player.isInvulnerable) {
       this.hitCount++;
       this.scoreElement.textContent = `Hits: ${this.hitCount}`;
@@ -250,7 +251,7 @@ export class Game {
             }
 
             // Only check player collision with enemy projectiles
-            if (proj.isEnemyProjectile && checkCollision(this.player, proj)) {
+            if (checkCollision(this.player, proj)) {
                 this.handleCollision();
                 this.projectiles.splice(i, 1);
             }
