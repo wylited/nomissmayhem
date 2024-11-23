@@ -526,9 +526,11 @@ export class Game {
     submitButton.style.padding = '10px 20px';
     submitButton.style.margin = '10px';
     submitButton.style.cursor = 'pointer';
+    let time = minutes*60 + remainingSeconds
     submitButton.onclick = async () => {
         if (nameInput.value.trim()) {
             try {
+
                 const response = await fetch('/api/leaderboard', {
                     method: 'POST',
                     headers: {
@@ -536,7 +538,7 @@ export class Game {
                     },
                     body: JSON.stringify({
                         name: nameInput.value.trim(),
-                        score: this.player.getMoney(),
+                        score: time,
                         time: this.timerElement.textContent
                     })
                 });
