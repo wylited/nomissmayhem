@@ -4,7 +4,7 @@ import { Projectile } from './Projectile.js';
 
 // Base Enemy class
 export class Enemy {
-    constructor(x, y, id, key=false, radius = 20) {
+    constructor(x, y, id, key=false, healing=false, radius =20) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -137,7 +137,7 @@ export class AttackerEnemy extends Enemy {
     attack(player) {
         // Calculate angle to player for accurate shooting
         const angle = Math.atan2(player.y - this.y, player.x - this.x);
-        const projectile = new Projectile(this.x, this.y, angle, this.projectileSpeed);
+        const projectile = new Projectile(this.x, this.y, angle, this.projectileSpeed, 10);
         projectile.isEnemyProjectile = true; // Mark as enemy projectile
         return projectile;
     }

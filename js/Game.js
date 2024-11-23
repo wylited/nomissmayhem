@@ -7,6 +7,8 @@ import { Music } from './Music.js';
 import { Key } from './Key.js';
 import { CANVAS, BULLETS_LIMITER, PLAYER } from './constants.js';
 import { Coin } from './Coin.js';
+import { checkCardCollision } from './Store.js';
+import { createMinimap, updateMinimap } from './minimap.js';
 
 export class Game {
   constructor() {
@@ -15,7 +17,6 @@ export class Game {
     this.scoreElement = document.getElementById('score');
     this.moneyElement = document.getElementById('money')
     this.dashElement = document.getElementById('dash');
-    this.bulletCooldown = 200
     this.lastBulletTime = Date.now();
     this.music = new Music();
 
@@ -50,6 +51,8 @@ export class Game {
     this.setupMusicControls();
 
     this.gameLoop();
+    createMinimap(Rooms, this.roomPosition);
+
   }
 
   setupMusicControls() {
@@ -95,6 +98,7 @@ export class Game {
     window.addEventListener('keydown', (e) => {
       if (e.key.toLowerCase() in this.keys) {
         this.keys[e.key.toLowerCase()] = true;
+        console.log(e);
       }
     });
 
@@ -113,14 +117,14 @@ export class Game {
     this.canvas.addEventListener('click', (e) => {
       const currentTime = Date.now();
       //console.log(currentTime);
-      if ((currentTime - this.lastBulletTime) >= this.bulletCooldown) {
+      if ((currentTime - this.lastBulletTime) >= this.player.shootCooldown) {
         // Check if enough time has passed since the last bullet was fired
         const rect = this.canvas.getBoundingClientRect();
         const canvasX = e.clientX - rect.left;
         const canvasY = e.clientY - rect.top;
 
         const angle = Math.atan2(canvasY - this.player.y, canvasX - this.player.x);
-        this.getCurrentRoom().projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
+        this.getCurrentRoom().projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35, 5));
 
         this.lastBulletTime = currentTime; // Update the last bullet firing time
       }
@@ -152,6 +156,7 @@ export class Game {
 
     if (door.type=='door' && door.shotcount >= door.openreq) {
       console.log('UNLOCK')
+
       return true;
     }
     return false;
@@ -172,6 +177,8 @@ export class Game {
         this.roomPosition[0] -= 1;
         this.player.y = 560
         this.player.x = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     //down
@@ -186,6 +193,8 @@ export class Game {
         this.roomPosition[0] += 1;
         this.player.y = 40
         this.player.x = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     //right
@@ -200,6 +209,8 @@ export class Game {
         this.roomPosition[1] += 1;
         this.player.x = 40
         this.player.y = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     //left
@@ -214,6 +225,8 @@ export class Game {
         this.roomPosition[1] -= 1;
         this.player.x = 560
         this.player.y = 300
+        this.getCurrentRoom().visited = 1;
+        createMinimap(Rooms, this.roomPosition);
       }
     }
     
@@ -233,6 +246,8 @@ export class Game {
 
   update() {
     this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
+
+    
 
     // Update enemies
     this.getCurrentRoom().enemies.forEach((enemy, index) => {
@@ -320,6 +335,20 @@ export class Game {
           }
           break;
       }
+
+      res = checkCardCollision(this.getCurrentRoom(), proj);
+
+      if (res) {
+        if (res[1][1] <= this.player.getMoney()) {
+          this.player.addPowerup(res[1][0]);
+          this.player.addMoney(-1*res[1][1]);
+
+          Rooms[this.roomPosition[0]][this.roomPosition[1]].bought[res[0]] = 1;
+          this.getCurrentRoom().projectiles.splice(i, 1);
+        }
+
+        
+      }
     }
 
     // Check coin collection
@@ -352,7 +381,7 @@ export class Game {
 
     this.checkRooms();
     this.updateTimer();
-  }
+  } 
 
   gameLoop() {
     if (!this.isGameRunning) return; // Stop the game loop if game is over
