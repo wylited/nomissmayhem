@@ -4,20 +4,35 @@ const ctx = canvas.getContext('2d');
 const blurCtx = blurCanvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const dashElement = document.getElementById('dash');
+const width = 600;
+const height = 600;
 let hitCount = 0;
 
 function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  blurCanvas.width = window.innerWidth;
-  blurCanvas.height = window.innerHeight;
-}
+    // Set fixed dimensions instead of window size
+    canvas.width = width;
+    canvas.height = height;
+    blurCanvas.width = width;
+    blurCanvas.height = height;
+    
+    // Center the canvases on the screen
+    canvas.style.position = 'absolute';
+    canvas.style.left = '50%';
+    canvas.style.top = '50%';
+    canvas.style.transform = 'translate(-50%, -50%)';
+    
+    blurCanvas.style.position = 'absolute';
+    blurCanvas.style.left = '50%';
+    blurCanvas.style.top = '50%';
+    blurCanvas.style.transform = 'translate(-50%, -50%)';
+  }
+  
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 const player = {
-  x: canvas.width / 2,
-  y: canvas.height / 2,
+  x: width / 2,
+  y: height / 2,
   radius: 20,
   speed: 5,
   maxSpeed: 5,
@@ -61,23 +76,33 @@ window.addEventListener('keyup', (e) => {
 });
 
 canvas.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
-
-canvas.addEventListener('click', (e) => {
-  const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
-  projectiles.push({
-    x: player.x,
-    y: player.y,
-    dx: Math.cos(angle) * projectileSpeed,
-    dy: Math.sin(angle) * projectileSpeed,
-    radius: 5,
-    bounces: 0,
-    canHurt: false,
-    createdAt: Date.now()
+    // Get canvas position and dimensions
+    const rect = canvas.getBoundingClientRect();
+    
+    // Convert window coordinates to canvas coordinates
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
   });
-});
+  
+  // Similarly, update the click handler
+  canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const canvasX = e.clientX - rect.left;
+    const canvasY = e.clientY - rect.top;
+    
+    const angle = Math.atan2(canvasY - player.y, canvasX - player.x);
+    projectiles.push({
+      x: player.x,
+      y: player.y,
+      dx: Math.cos(angle) * projectileSpeed,
+      dy: Math.sin(angle) * projectileSpeed,
+      radius: 5,
+      bounces: 0,
+      canHurt: false,
+      createdAt: Date.now()
+    });
+  });
+
 
 function checkCollision(circle1, circle2) {
   const dx = circle1.x - circle2.x;
@@ -100,6 +125,8 @@ function handleCollision() {
 
 function handleDash() {
   if (player.canDash && keys.shift) {
+    console.log(mouseY, player.y)
+    console.log(mouseX, player.x)
     const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
     player.dx = Math.cos(angle) * player.dashPower;
     player.dy = Math.sin(angle) * player.dashPower;
