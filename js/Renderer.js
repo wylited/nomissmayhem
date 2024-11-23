@@ -154,6 +154,19 @@ export class Renderer {
         });
     }
 
+    // Draw keys
+    if (room.keys && room.keys.length > 0) {
+        room.keys.forEach(key => {
+            this.ctx.beginPath();
+            this.ctx.arc(key.x, key.y, key.radius, 0, Math.PI * 2);
+            this.ctx.fillStyle = key.color;
+            this.ctx.fill();
+            this.ctx.strokeStyle = '#000';
+            this.ctx.lineWidth = 1;
+            this.ctx.stroke();
+        });
+    }
+
     // Draw money counter (optional)
     this.ctx.fillStyle = '#fff';
     this.ctx.font = '20px Arial';

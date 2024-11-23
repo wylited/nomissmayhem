@@ -15,6 +15,7 @@ const startRoom = {
     ],
     projectiles: [],
     coins: [],
+    keys: [],
 };
 
 const emptyRoom = {
@@ -26,11 +27,12 @@ const emptyRoom = {
         right: { type: "door", open: 0, openreq: 10, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('regular', 150, 100),
-        EnemyFactory.createEnemy('attacker', 250, 200),
+        EnemyFactory.createEnemy('regular', 150, 100, 'keyer', true),
+        EnemyFactory.createEnemy('attacker', 250, 200, 'keyless'),
     ],
     projectiles: [],
     coins: [],
+    keys: [],
 };
 
 const testRoom = {
@@ -46,6 +48,7 @@ const testRoom = {
     ],
     projectiles: [],
     coins: [],
+    keys: [],
 };
 
 export const startIndex = [1, 0];

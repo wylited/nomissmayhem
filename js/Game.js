@@ -4,7 +4,7 @@ import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
 import { Rooms, startIndex, checkDoorCollision } from './Rooms.js';
 import { Music } from './Music.js';
-import { EnemyFactory } from './Enemy.js';
+import { Key } from './Key.js';
 import { CANVAS, BULLETS_LIMITER } from './constants.js';
 import { Coin } from './Coin.js';
 
@@ -29,7 +29,7 @@ export class Game {
     this.keys = {
       w: false,
       a: false,
-      s: false,
+      s: false, 
       d: false,
       shift: false,
     };
@@ -236,8 +236,14 @@ export class Game {
             
             // Drop coin when enemy dies
             if (!enemy.isActive) {
+              console.log("enemy", enemy);
               const coin = new Coin(enemy.x, enemy.y, enemy.coinDrop.value, enemy.coinDrop.type);
               this.getCurrentRoom().coins.push(coin);
+              if (enemy.hasKey) {
+                console.log("dropping key");
+                const key = new Key(enemy.id, enemy.x, enemy.y);
+                this.getCurrentRoom().keys.push(key);
+              }
               console.log('Created coin:', coin);
               console.log('Current room coins:', this.getCurrentRoom().coins);
             }
@@ -304,6 +310,20 @@ export class Game {
       
       if (distance < this.player.radius + coin.radius) {
         this.player.addMoney(coin.value);
+        return false;
+      }
+      return true;
+    });
+
+    // Check key collection
+    this.getCurrentRoom().keys = this.getCurrentRoom().keys.filter(key => {
+      const distance = Math.sqrt(
+        Math.pow(this.player.x - key.x, 2) + 
+        Math.pow(this.player.y - key.y, 2)
+      );
+      
+      if (distance < this.player.radius + key.radius) {
+        this.player.addKey(key.id);
         return false;
       }
       return true;

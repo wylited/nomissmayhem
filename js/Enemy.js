@@ -4,7 +4,7 @@ import { Projectile } from './Projectile.js';
 
 // Base Enemy class
 export class Enemy {
-    constructor(x, y, radius = 20) {
+    constructor(x, y, id, key=false, radius = 20) {
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -18,6 +18,8 @@ export class Enemy {
             type: 'bronze',
             value: 1
         };
+        this.hasKey = key;
+        this.id = id;
     }
 
     update(player) {
@@ -176,20 +178,20 @@ export class LaserEnemy extends Enemy {
 
 // Enemy Factory
 export class EnemyFactory {
-    static createEnemy(type, x, y) {
+    static createEnemy(type, x, y, id, key=false) {
         switch(type.toLowerCase()) {
             case 'regular':
-                return new Enemy(x, y);
+                return new Enemy(x, y, id, key);
             case 'shielded':
-                return new ShieldedEnemy(x, y);
+                return new ShieldedEnemy(x, y, id, key);
             case 'reflector':
-                return new ReflectorEnemy(x, y);
+                return new ReflectorEnemy(x, y, id, key);
             case 'attacker':
-                return new AttackerEnemy(x, y);
+                return new AttackerEnemy(x, y, id, key);
             case 'laser':
-                return new LaserEnemy(x, y);
+                return new LaserEnemy(x, y, id, key);
             default:
-                return new Enemy(x, y);
+                return new Enemy(x, y, id, key);
         }
     }
 }
