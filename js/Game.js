@@ -149,7 +149,7 @@ export class Game {
   checkRooms() {
     //console.log(this.player.x, this.player.y);
     const midpoint = [this.canvas.width/2, this.canvas.height/2];
-
+    //up
     if (this.player.y < 25 && this.player.x < 350 && this.player.x > 250 ) {
       //console.log(this.roomPosition[0]);
       let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.up
@@ -161,6 +161,48 @@ export class Game {
         this.roomPosition[0] -= 1;
         this.player.y = 580
         this.player.x = 300
+      }
+    }
+    //down
+    if (this.player.y > 575 && this.player.x < 350 && this.player.x > 250 ) {
+      //console.log(this.roomPosition[0]);
+      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.down
+      let bool = this.checkDoor(status);
+
+      status.open = bool;
+      
+      if (bool) {
+        this.roomPosition[0] += 1;
+        this.player.y = 20
+        this.player.x = 300
+      }
+    }
+    //right
+    if (this.player.x > 575 && this.player.y < 350 && this.player.y > 250 ) {
+      //console.log(this.roomPosition[0]);
+      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.right
+      let bool = this.checkDoor(status);
+
+      status.open = bool;
+      
+      if (bool) {
+        this.roomPosition[1] += 1;
+        this.player.x = 20
+        this.player.y = 300
+      }
+    }
+    //left
+    if (this.player.x < 25 && this.player.y < 350 && this.player.y > 250 ) {
+      //console.log(this.roomPosition[0]);
+      let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.left
+      let bool = this.checkDoor(status);
+
+      status.open = bool;
+      
+      if (bool) {
+        this.roomPosition[1] -= 1;
+        this.player.x = 580
+        this.player.y = 300
       }
     }
     
