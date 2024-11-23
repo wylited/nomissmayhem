@@ -77,7 +77,7 @@ export class Renderer {
     }
   }
   
-  render(player, projectiles, mouseX, mouseY, imgsrc) {
+  render(player, projectiles, mouseX, mouseY, imgsrc, enemies) {
     // Clear the entire canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.bgImg = new Image();
@@ -117,6 +117,24 @@ export class Renderer {
     this.ctx.strokeStyle = '#fff';
     this.ctx.lineWidth = 2;
     this.ctx.stroke();
+
+    // Draw enemies
+    enemies.forEach(enemy => {
+      if (enemy.isActive) {
+        this.ctx.beginPath();
+        this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+        this.ctx.fillStyle = enemy.color;
+        this.ctx.fill();
+        this.ctx.closePath();
+
+        // Draw health bar
+        this.ctx.fillStyle = 'red';
+        this.ctx.fillRect(enemy.x - 25, enemy.y - enemy.radius - 10, 50, 5);
+        this.ctx.fillStyle = 'green';
+        this.ctx.fillRect(enemy.x - 25, enemy.y - enemy.radius - 10, (enemy.health / 100) * 50, 5);
+      }
+    });
+
 
     // Draw projectiles
     //console.log(projectiles);
