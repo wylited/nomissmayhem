@@ -236,7 +236,7 @@ const storeRoom15 = {
     coins: [],
     keys: [],
     type: "shop",
-    powerUps: [['super', 8, 'Super Shot', 'Hold down to shoot continuously!'], ['extrahealth', 5, 'Extra Health', 'Increases your maximum health!']],
+    powerUps: [['super', 8, 'Super Shot', 'Removes all shooting cooldown!'], ['extrahealth', 5, 'Extra Health', 'Increases your maximum health!']],
     bought: [0,0],
     health:[],
     visited: 0
@@ -294,7 +294,7 @@ const keyRoom = {
     },
     enemies: [
         EnemyFactory.createEnemy('attacker', 150, 100), 
-        EnemyFactory.createEnemy('regular', 400, 100, '', true, true, 50, 200),
+        EnemyFactory.createEnemy('regular', 400, 100, '', true, true, 50, 200   ),
 
     ],
     projectiles: [],
