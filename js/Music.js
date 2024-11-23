@@ -18,6 +18,7 @@ export class Music {
             '../assets/track1.mp3',
             '../assets/track2.mp3',
         ];
+
         this.currentTrackIndex = 0;
         this.nextTrackIndex = 1;
         this.currentAudio = new Audio();
