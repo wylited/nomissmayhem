@@ -1,11 +1,16 @@
 const canvas = document.getElementById('gameCanvas');
+const blurCanvas = document.getElementById('blurCanvas');
 const ctx = canvas.getContext('2d');
+const blurCtx = blurCanvas.getContext('2d');
 const scoreElement = document.getElementById('score');
+const dashElement = document.getElementById('dash');
 let hitCount = 0;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  blurCanvas.width = window.innerWidth;
+  blurCanvas.height = window.innerHeight;
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
@@ -15,22 +20,31 @@ const player = {
   y: canvas.height / 2,
   radius: 20,
   speed: 5,
+  maxSpeed: 5,
+  friction: 0.85,
   dx: 0,
   dy: 0,
   isInvulnerable: false,
-  invulnerableTime: 1000
+  invulnerableTime: 1000,
+  canDash: true,
+  isDashing: false,
+  dashCooldown: 2000,
+  dashPower: 100,
+  dashDuration: 200,
+  trailPositions: []
 };
 
 const keys = {
   w: false,
   a: false,
   s: false,
-  d: false
+  d: false,
+  shift: false
 };
 
 const projectiles = [];
-const projectileSpeed = 10;
-const maxBounces = 3;
+const projectileSpeed = 4;
+const maxBounces = 100;
 let mouseX = 0;
 let mouseY = 0;
 
@@ -60,8 +74,8 @@ canvas.addEventListener('click', (e) => {
     dy: Math.sin(angle) * projectileSpeed,
     radius: 5,
     bounces: 0,
-    canHurt: false,  // Start as non-hurting
-    createdAt: Date.now() // Track creation time
+    canHurt: false,
+    createdAt: Date.now()
   });
 });
 
@@ -76,7 +90,7 @@ function handleCollision() {
   if (!player.isInvulnerable) {
     hitCount++;
     scoreElement.textContent = `Hits: ${hitCount}`;
-    
+
     player.isInvulnerable = true;
     setTimeout(() => {
       player.isInvulnerable = false;
@@ -84,26 +98,85 @@ function handleCollision() {
   }
 }
 
-function updatePlayerPosition() {
-  player.dx = 0;
-  player.dy = 0;
+function handleDash() {
+  if (player.canDash && keys.shift) {
+    const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
+    player.dx = Math.cos(angle) * player.dashPower;
+    player.dy = Math.sin(angle) * player.dashPower;
 
-  if (keys.w) player.dy -= player.speed;
-  if (keys.s) player.dy += player.speed;
-  if (keys.a) player.dx -= player.speed;
-  if (keys.d) player.dx += player.speed;
+    player.canDash = false;
+    player.isDashing = true;
+    dashElement.textContent = "Dash Cooling...";
 
-  if (player.dx !== 0 && player.dy !== 0) {
-    const factor = 1 / Math.sqrt(2);
-    player.dx *= factor;
-    player.dy *= factor;
+    setTimeout(() => {
+      player.isDashing = false;
+    }, player.dashDuration);
+
+    setTimeout(() => {
+      player.canDash = true;
+      dashElement.textContent = "Dash Ready!";
+    }, player.dashCooldown);
   }
+}
+
+function updatePlayerPosition() {
+  // Store position for trail
+  player.trailPositions.unshift({ x: player.x, y: player.y });
+  if (player.trailPositions.length > 5) {
+    player.trailPositions.pop();
+  }
+
+  let moveX = 0;
+  let moveY = 0;
+
+  if (keys.w) moveY -= 1;
+  if (keys.s) moveY += 1;
+  if (keys.a) moveX -= 1;
+  if (keys.d) moveX += 1;
+
+  if (moveX !== 0 && moveY !== 0) {
+    const length = Math.sqrt(moveX * moveX + moveY * moveY);
+    moveX /= length;
+    moveY /= length;
+  }
+
+  player.dx += moveX * player.speed;
+  player.dy += moveY * player.speed;
+
+  handleDash();
+
+  const currentSpeed = Math.sqrt(player.dx * player.dx + player.dy * player.dy);
+  if (currentSpeed > player.maxSpeed && !player.isDashing) {
+    const ratio = player.maxSpeed / currentSpeed;
+    player.dx *= ratio;
+    player.dy *= ratio;
+  }
+
+  player.dx *= player.friction;
+  player.dy *= player.friction;
 
   player.x += player.dx;
   player.y += player.dy;
 
   player.x = Math.max(player.radius, Math.min(canvas.width - player.radius, player.x));
   player.y = Math.max(player.radius, Math.min(canvas.height - player.radius, player.y));
+
+  if (Math.abs(player.dx) < 0.01) player.dx = 0;
+  if (Math.abs(player.dy) < 0.01) player.dy = 0;
+}
+
+function drawMotionBlur() {
+  blurCtx.clearRect(0, 0, blurCanvas.width, blurCanvas.height);
+
+  if (player.isDashing || Math.abs(player.dx) > 3 || Math.abs(player.dy) > 3) {
+    player.trailPositions.forEach((pos, index) => {
+      const alpha = (1 - index / player.trailPositions.length) * 0.2;
+      blurCtx.beginPath();
+      blurCtx.arc(pos.x, pos.y, player.radius, 0, Math.PI * 2);
+      blurCtx.fillStyle = `rgba(68, 136, 255, ${alpha})`;
+      blurCtx.fill();
+    });
+  }
 }
 
 function draw() {
@@ -111,12 +184,18 @@ function draw() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   updatePlayerPosition();
+  drawMotionBlur();
 
   ctx.beginPath();
   ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-  ctx.fillStyle = player.isInvulnerable ? 
-    (Math.floor(Date.now() / 100) % 2 === 0 ? '#4488ff' : '#ff4444') : 
-    '#4488ff';
+
+  if (player.isDashing) {
+    ctx.fillStyle = Math.floor(Date.now() / 50) % 2 === 0 ? '#4488ff' : '#66aaff';
+  } else if (player.isInvulnerable) {
+    ctx.fillStyle = Math.floor(Date.now() / 100) % 2 === 0 ? '#4488ff' : '#ff4444';
+  } else {
+    ctx.fillStyle = '#4488ff';
+  }
   ctx.fill();
 
   const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
@@ -133,8 +212,7 @@ function draw() {
 
   for (let i = projectiles.length - 1; i >= 0; i--) {
     const proj = projectiles[i];
-    
-    // Enable collision after projectile has traveled away from player
+
     if (!proj.canHurt && Date.now() - proj.createdAt > 100) {
       proj.canHurt = true;
     }
@@ -142,7 +220,6 @@ function draw() {
     proj.x += proj.dx;
     proj.y += proj.dy;
 
-    // Only check collision if projectile can hurt
     if (proj.canHurt && checkCollision(player, proj)) {
       handleCollision();
       projectiles.splice(i, 1);
