@@ -7,7 +7,7 @@ export const CANVAS = {
 export const PLAYER = {
   RADIUS: 20,
   SPEED: 1,
-  MAX_SPEED: 5,
+  MAX_SPEED: 3.7,
   FRICTION: 0.96,
   INVULNERABLE_TIME: 500,
   DASH_COOLDOWN: 2000,

@@ -167,6 +167,18 @@ export class Renderer {
         });
     }
 
+    if (room.health && room.health.length > 0) {
+      room.health.forEach(healing => {
+          this.ctx.beginPath();
+          this.ctx.arc(healing.x, healing.y, healing.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = healing.color;
+          this.ctx.fill();
+          this.ctx.strokeStyle = '#000';
+          this.ctx.lineWidth = 1;
+          this.ctx.stroke();
+      });
+  }
+
     // render cards in shop
     if (room.type=="shop") {
       let words = ''

@@ -8,7 +8,7 @@ export class Enemy {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.speed = 2;
+        this.speed = 1.3;
         this.health = 100;
         this.type = 'regular';
         this.isActive = true;
@@ -19,6 +19,7 @@ export class Enemy {
             value: 1
         };
         this.hasKey = key;
+        this.healing = healing
         this.id = id;
     }
 
@@ -178,20 +179,21 @@ export class LaserEnemy extends Enemy {
 
 // Enemy Factory
 export class EnemyFactory {
-    static createEnemy(type, x, y, id, key=false) {
+    static createEnemy(type, x, y, id, key=false, healing=false) {
+        console.log(healing);
         switch(type.toLowerCase()) {
             case 'regular':
-                return new Enemy(x, y, id, key);
+                return new Enemy(x, y, id, key, healing);
             case 'shielded':
-                return new ShieldedEnemy(x, y, id, key);
+                return new ShieldedEnemy(x, y, id, key, healing);
             case 'reflector':
-                return new ReflectorEnemy(x, y, id, key);
+                return new ReflectorEnemy(x, y, id, key, healing);
             case 'attacker':
-                return new AttackerEnemy(x, y, id, key);
+                return new AttackerEnemy(x, y, id, key, healing);
             case 'laser':
-                return new LaserEnemy(x, y, id, key);
+                return new LaserEnemy(x, y, id, key, healing);
             default:
-                return new Enemy(x, y, id, key);
+                return new Enemy(x, y, id, key, healing );
         }
     }
 }

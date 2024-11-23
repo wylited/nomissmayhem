@@ -73,3 +73,21 @@ body {
     font-family: Arial, sans-serif;
     font-size: 24px;
 }
+
+#title {
+    position: fixed;
+    top: 0px;
+    left: 450px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 45px;
+}
+
+#link {
+    position: fixed;
+    bottom: 0px;
+    left: 430px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+}

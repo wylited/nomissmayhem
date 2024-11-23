@@ -35,8 +35,10 @@ const emptyRoom = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
-    visited: 0
+    visited: 0,
+
 };
 
 const testRoom = {
@@ -72,6 +74,7 @@ const shopRoom = {
     coins: [],
     type: "shop",
     keys: [],
+    health:[],
     powerUps: [['extraballs', 2, 'Extra Balls', 'Increases the speed at which you can fire!'], ['extrahealth', 1, 'Extra Health', 'Increases your maximum health!']],
     bought: [0, 0],
     visited: 0
@@ -91,6 +94,7 @@ const nullTile = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "nullTile",
 };
 
@@ -108,6 +112,7 @@ const tutorialRoom = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 1
 };
@@ -121,11 +126,12 @@ const tutorialRoom2 = {
         right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('regular', 150, 100)
+        EnemyFactory.createEnemy('regular', 150, 100, 'true', false, true)
     ],
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 0
 };
@@ -146,6 +152,7 @@ const tutorialRoom3 = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 0
 };
@@ -167,6 +174,7 @@ const defaultRoom04 = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 0
 };
@@ -187,6 +195,7 @@ const defaultRoom14 = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 0
 };
@@ -207,6 +216,7 @@ const defaultRoom05 = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 0
 };
@@ -228,6 +238,7 @@ const storeRoom15 = {
     type: "shop",
     powerUps: [['doubleshot', 8, 'Double Shot', 'Get another gun to shoot from!'], ['extrahealth', 5, 'Extra Health', 'Increases your maximum health!']],
     bought: [0,0],
+    health:[],
     visited: 0
 };
 
@@ -248,6 +259,7 @@ const defaultRoom25 = {
     projectiles: [],
     coins: [],
     keys: [],
+    health:[],
     type: "regular",
     visited: 0
 };

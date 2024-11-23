@@ -9,6 +9,7 @@ import { CANVAS, BULLETS_LIMITER, PLAYER } from './constants.js';
 import { Coin } from './Coin.js';
 import { checkCardCollision } from './Store.js';
 import { createMinimap, updateMinimap } from './minimap.js';
+import { Health } from './Health.js';
 
 export class Game {
   constructor() {
@@ -280,6 +281,11 @@ export class Game {
                 const key = new Key(enemy.id, enemy.x, enemy.y);
                 this.getCurrentRoom().keys.push(key);
               }
+              if (enemy.healing) {
+                console.log("dropping health");
+                const healing = new Health(enemy.id, enemy.x, enemy.y);
+                this.getCurrentRoom().health.push(healing)
+              }
               console.log('Created coin:', coin);
               console.log('Current room coins:', this.getCurrentRoom().coins);
             }
@@ -374,6 +380,21 @@ export class Game {
       
       if (distance < this.player.radius + key.radius) {
         this.player.addKey(key.id);
+        return false;
+      }
+      return true;
+    });
+
+    this.getCurrentRoom().health = this.getCurrentRoom().health.filter(healing => {
+      const distance = Math.sqrt(
+        Math.pow(this.player.x - healing.x, 2) + 
+        Math.pow(this.player.y - healing.y, 2)
+      );
+      
+      if (distance < this.player.radius + healing.radius) {
+        console.log('pickup')
+        this.player.health = PLAYER.MAX_HEALTH;
+        this.scoreElement.textContent = `Health: ${this.player.health}`;
         return false;
       }
       return true;

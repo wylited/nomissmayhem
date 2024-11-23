@@ -11,6 +11,7 @@ export class Player {
     this.friction = PLAYER.FRICTION;
     this.dx = 0;
     this.dy = 0;
+    this.double = 0;
     this.isInvulnerable = false;
     this.invulnerableTime = PLAYER.INVULNERABLE_TIME;
     this.canDash = true;
