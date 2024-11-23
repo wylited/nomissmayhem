@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="styles/style.css">
-  
-  
+    <link rel="stylesheet" href="styles/styles.css" onerror="console.error('Failed to load CSS')">
 </head>
 <body class="noselect">
-  <div id = "fullscreen">
-    <div id="score">Hits: 0</div>
-    <div id="dash">Dash Ready!</div>
-    <canvas id="gameCanvas"></canvas>
-    <canvas id="blurCanvas"></canvas>
-  </div>
-  </body>
-  <script src="main.js"></script>
+    <div id="fullscreen">
+        <div id="score">Hits: 0</div>
+        <div id="dash">Dash Ready!</div>
+        <canvas id="gameCanvas"></canvas>
+        <canvas id="blurCanvas"></canvas>
+    </div>
+
+    <script>
+        // Test if elements are loading
+        console.log('DOM loaded');
+        console.log('GameCanvas:', document.getElementById('gameCanvas'));
+        console.log('BlurCanvas:', document.getElementById('blurCanvas'));
+    </script>
+
+    <script src="main.js" onerror="console.error('Failed to load main.js')"></script>
+</body>
 </html>
