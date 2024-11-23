@@ -119,7 +119,9 @@ export class Renderer {
     this.ctx.stroke();
 
     // Draw projectiles
+    //console.log(projectiles);
     projectiles.forEach(proj => {
+      
       this.ctx.beginPath();
       this.ctx.arc(proj.x, proj.y, proj.radius, 0, Math.PI * 2);
       const bounceColor = 255 - (proj.bounces * 60);

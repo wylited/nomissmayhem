@@ -12,12 +12,14 @@ export class Game {
     this.blurCanvas = document.getElementById('blurCanvas');
     this.scoreElement = document.getElementById('score');
     this.dashElement = document.getElementById('dash');
-
+    this.bulletCooldown = 200
+    this.lastBulletTime = Date.now();
     this.music = new Music();
 
     this.player = new Player(CANVAS.WIDTH / 2, CANVAS.HEIGHT / 2);
     this.renderer = new Renderer(this.canvas, this.blurCanvas);
     this.projectiles = [];
+    this.roomPosition = startIndex;
     this.hitCount = 0;
     this.mouseX = 0;
     this.mouseY = 0;
@@ -102,7 +104,8 @@ export class Game {
 
     this.canvas.addEventListener('click', (e) => {
       const currentTime = Date.now();
-      if (currentTime - this.lastBulletTime >= this.bulletCooldown) {
+      console.log(currentTime);
+      if ((currentTime - this.lastBulletTime) >= this.bulletCooldown) {
         // Check if enough time has passed since the last bullet was fired
         const rect = this.canvas.getBoundingClientRect();
         const canvasX = e.clientX - rect.left;
@@ -143,7 +146,7 @@ export class Game {
     const midpoint = [this.canvas.width/2, this.canvas.height/2];
 
     if (this.player.y < 25 && this.player.x < 350 && this.player.x > 250 ) {
-      console.log(this.roomPosition[0]);
+      //console.log(this.roomPosition[0]);
       let status = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.up
       let bool = this.checkDoor(status);
 
@@ -182,6 +185,7 @@ export class Game {
 
   gameLoop() {
     this.update();
+    console.log(this.projectiles);
     console.log(Rooms[this.roomPosition[0]][this.roomPosition[1]].background);
     this.renderer.render(this.player, this.projectiles, this.mouseX, this.mouseY, Rooms[this.roomPosition[0]][this.roomPosition[1]].background);
     requestAnimationFrame(() => this.gameLoop());
