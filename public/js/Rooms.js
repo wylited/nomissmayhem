@@ -294,7 +294,7 @@ const keyRoom = {
     },
     enemies: [
         EnemyFactory.createEnemy('attacker', 150, 100), 
-        EnemyFactory.createEnemy('regular', 400, 100,'key1', true, true, 50, 500),
+        EnemyFactory.createEnemy('regular', 400, 100,'key1',  true, true, 50, 500),
         EnemyFactory.createEnemy('attacker', 250, 500),
         EnemyFactory.createEnemy('attacker', 300, 200)
     ],
