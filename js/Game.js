@@ -34,6 +34,11 @@ export class Game {
       shift: false,
     };
 
+    this.timerElement = document.getElementById('timer');
+    this.startTime = Date.now();
+    this.elapsedTime = 0;
+    this.isGameRunning = true;
+
     this.setup();
   }
 
@@ -210,6 +215,17 @@ export class Game {
     this.canvas.width
   }
 
+  updateTimer() {
+    if (this.isGameRunning) {
+      this.elapsedTime = Date.now() - this.startTime;
+      const seconds = Math.floor(this.elapsedTime / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      
+      this.timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+  }
+
   update() {
     this.player.update(this.keys, this.mouseX, this.mouseY, this.dashElement);
 
@@ -330,6 +346,7 @@ export class Game {
     });
 
     this.checkRooms();
+    this.updateTimer();
   }
 
   gameLoop() {
@@ -347,5 +364,20 @@ export class Game {
 
   getCurrentRoom() {
     return Rooms[this.roomPosition[0]][this.roomPosition[1]];
+  }
+
+  pauseTimer() {
+    this.isGameRunning = false;
+  }
+
+  resumeTimer() {
+    this.isGameRunning = true;
+    this.startTime = Date.now() - this.elapsedTime;
+  }
+
+  resetTimer() {
+    this.startTime = Date.now();
+    this.elapsedTime = 0;
+    this.isGameRunning = true;
   }
 }
