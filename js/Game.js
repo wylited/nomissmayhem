@@ -16,7 +16,6 @@ export class Game {
     this.scoreElement = document.getElementById('score');
     this.moneyElement = document.getElementById('money')
     this.dashElement = document.getElementById('dash');
-    this.bulletCooldown = 200
     this.lastBulletTime = Date.now();
     this.music = new Music();
 
@@ -114,14 +113,14 @@ export class Game {
     this.canvas.addEventListener('click', (e) => {
       const currentTime = Date.now();
       //console.log(currentTime);
-      if ((currentTime - this.lastBulletTime) >= this.bulletCooldown) {
+      if ((currentTime - this.lastBulletTime) >= this.player.shootCooldown) {
         // Check if enough time has passed since the last bullet was fired
         const rect = this.canvas.getBoundingClientRect();
         const canvasX = e.clientX - rect.left;
         const canvasY = e.clientY - rect.top;
 
         const angle = Math.atan2(canvasY - this.player.y, canvasX - this.player.x);
-        this.getCurrentRoom().projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
+        this.getCurrentRoom().projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35, 5));
 
         this.lastBulletTime = currentTime; // Update the last bullet firing time
       }

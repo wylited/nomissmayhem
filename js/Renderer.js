@@ -169,22 +169,105 @@ export class Renderer {
 
     // render cards in shop
     if (room.type=="shop") {
+      let words = ''
+      let line = ''
+      let y = ''
+      let maxWidth = '';
+      let cost = ''
       if (!room.bought[0]) {
-      this.ctx.fillStyle = '#4a4a4a';
-      this.ctx.fillRect(180, 35, 100, 150);
-      this.ctx.fillStyle = '#ffffff';
-      this.ctx.font = '20px Arial';
-      this.ctx.textAlign = 'center';
-      this.ctx.fillText('Item', 230, 80);
+        // Card 1 background
+        this.ctx.fillStyle = '#2a2a2a';
+        this.ctx.fillRect(150, 35, 140, 200);
+        
+        // Inner card border
+        this.ctx.strokeStyle = '#ffd700';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(155, 40, 130, 190);
+        
+        // Title section
+        this.ctx.fillStyle = '#4a4a4a';
+        this.ctx.fillRect(155, 45, 127, 45);
+        
+        // Title text
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.font = 'bold 20px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(room.powerUps[0][2], 220, 75);
+        
+        // Description text
+        this.ctx.font = '12px Arial';
+        this.ctx.fillStyle = '#dddddd';
+        
+        // Word wrap for description
+        let words = room.powerUps[0][3].split(' ');
+        let line = '';
+        let y = 110;
+        let maxWidth = 120;
+        
+        words.forEach(word => {
+          let testLine = line + word + ' ';
+          let metrics = this.ctx.measureText(testLine);
+          if (metrics.width > maxWidth) {
+            this.ctx.fillText(line, 220, y);
+            line = word + ' ';
+            y += 20;
+          } else {
+            line = testLine;
+          }
+        });
+        this.ctx.fillText(line, 220, y);
+        this.ctx.font = '17px Arial Bold';
+        let cost = "$"+room.powerUps[0][1];
+        this.ctx.fillText(cost, 220, 210)
       }
-      // Second card
+
       if (!room.bought[1]) {
-      this.ctx.fillStyle = '#4a4a4a';
-      this.ctx.fillRect(320, 35, 100, 150);
-      this.ctx.fillStyle = '#ffffff';
-      this.ctx.font = '20px Arial';
-      this.ctx.textAlign = 'center';
-      this.ctx.fillText('Item', 370, 80);
+        // Card 2 background
+        this.ctx.fillStyle = '#2a2a2a';
+        this.ctx.fillRect(350, 35, 140, 200);
+        
+        // Inner card border
+        this.ctx.strokeStyle = '#ffd700';
+        this.ctx.lineWidth = 2;
+        this.ctx.strokeRect(355, 40, 130, 190);
+        
+        // Title section
+        this.ctx.fillStyle = '#4a4a4a';
+        this.ctx.fillRect(355, 45, 127, 45);
+        
+        // Title text
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.font = 'bold 20px Arial';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(room.powerUps[1][2], 420, 75);
+        
+        // Description text
+        this.ctx.font = '12px Arial';
+        this.ctx.fillStyle = '#dddddd';
+        
+        // Word wrap for description
+        words = room.powerUps[1][3].split(' ');
+        line = '';
+        y = 110;
+        maxWidth = 120;
+        
+        words.forEach(word => {
+          let testLine = line + word + ' ';
+          let metrics = this.ctx.measureText(testLine);
+          if (metrics.width > maxWidth) {
+            this.ctx.fillText(line, 420, y);
+            line = word + ' ';
+            y += 20;
+          } else {
+            line = testLine;
+          }
+        });
+        
+        this.ctx.fillText(line, 420, y);
+
+        this.ctx.font = '17px Arial Bold';
+        let cost = "$"+room.powerUps[1][1];
+        this.ctx.fillText(cost, 420, 210);
       }
     }
 

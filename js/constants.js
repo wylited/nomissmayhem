@@ -15,6 +15,7 @@ export const PLAYER = {
   DASH_DURATION: 200,
   MAX_HEALTH: 100,
   DAMAGE_PER_HIT: 10,
+  SHOOT_COOLDOWN: 200,
 };
 
 export const PROJECTILE = {

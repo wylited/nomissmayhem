@@ -15,6 +15,7 @@ export class Player {
     this.invulnerableTime = PLAYER.INVULNERABLE_TIME;
     this.canDash = true;
     this.isDashing = false;
+    this.shootCooldown = PLAYER.SHOOT_COOLDOWN;
     this.dashCooldown = PLAYER.DASH_COOLDOWN;
     this.dashDistance = PLAYER.DASH_DISTANCE;
     this.dashDuration = PLAYER.DASH_DURATION;
@@ -113,7 +114,9 @@ export class Player {
   addPowerup(power) {
     switch (power) {
       case "extraballs":
-        
+        this.shootCooldown = 3;
+        break;
+
     }
     console.log(power);
   }

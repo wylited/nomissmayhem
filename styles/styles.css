@@ -50,10 +50,19 @@ body {
     font-family: Arial, sans-serif;
     font-size: 24px;
 }
-
+    
 #money {
     position: fixed;
     top: 80px;
+    left: 20px;
+    color: white;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+}
+
+#timer {
+    position: fixed;
+    top: 110px;
     left: 20px;
     color: white;
     font-family: Arial, sans-serif;

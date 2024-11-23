@@ -69,7 +69,7 @@ const shopRoom = {
     coins: [],
     type: "shop",
     keys: [],
-    powerUps: [['extraballs', 2], ['extrahealth', 1]],
+    powerUps: [['extraballs', 2, 'Extra Balls', 'Increases the speed at which you can fire!'], ['extrahealth', 1, 'Extra Health', 'Increases your maximum health!']],
     bought: [0, 0]
 };
 
@@ -101,6 +101,8 @@ export function checkDoorCollision(proj) {
     let x = proj.x;
     let y = proj.y;
     //260 -> 340, 20 tall
+    //this.ctx.fillRect(350, 35, 140, 200);
+    //this.ctx.fillRect(150, 35, 140, 200);
 
     if (x > 258 && x < 342) {
         if (y < 22) {
