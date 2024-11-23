@@ -179,7 +179,7 @@ export class LaserEnemy extends Enemy {
 
 // Enemy Factory
 export class EnemyFactory {
-    static createEnemy(type, x, y, id, key=false, healing=false) {
+    static createEnemy(type, x, y, id, key=false, healing=false, radius = 20, health=100) {
         console.log(healing);
         switch(type.toLowerCase()) {
             case 'regular':

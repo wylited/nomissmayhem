@@ -52,6 +52,7 @@ export class Game {
     this.setupMusicControls();
 
     this.gameLoop();
+    //console.log(Rooms)
     createMinimap(Rooms, this.roomPosition);
 
   }
@@ -99,7 +100,7 @@ export class Game {
     window.addEventListener('keydown', (e) => {
       if (e.key.toLowerCase() in this.keys) {
         this.keys[e.key.toLowerCase()] = true;
-        console.log(e);
+        //console.log(e);
       }
     });
 
@@ -156,7 +157,7 @@ export class Game {
     }
 
     if (door.type=='door' && door.shotcount >= door.openreq) {
-      console.log('UNLOCK')
+      //console.log('UNLOCK')
 
       return true;
     }
