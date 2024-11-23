@@ -2,7 +2,7 @@ import { Player } from './Player.js';
 import { Projectile } from './Projectile.js';
 import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
-import { Rooms, startIndex } from './Rooms.js';
+import { Rooms, startIndex, checkDoorCollision } from './Rooms.js';
 import { Music } from './Music.js';
 import { EnemyFactory } from './Enemy.js';
 import { CANVAS, BULLETS_LIMITER } from './constants.js';
@@ -135,13 +135,15 @@ export class Game {
   }
 
   checkDoor(door) {
-    if ((door.type=='door' || door.type=='shoot') && door.open==1) {
+    if ((door.type=='door') && door.open==1) {
       return true;
     }
 
-    if (door.type=='shoot' && door.shotcount > door.openreq) {
+    if (door.type=='door' && door.shotcount > door.openreq) {
+      console.log('UNLOCK')
       return true;
     }
+    return false;
   }
 
   checkRooms() {
@@ -180,7 +182,7 @@ export class Game {
       //console.log(this.roomPosition[0]);
       let status = this.getCurrentRoom().travel.right
       let bool = this.checkDoor(status);
-
+      console.log(status)
       status.open = bool;
       
       if (bool) {
@@ -255,10 +257,40 @@ export class Game {
         continue;
       }
 
-      // Only check player collision with enemy projectiles
       if (checkCollision(this.player, proj)) {
         this.handleCollision();
         this.getCurrentRoom().projectiles.splice(i, 1);
+      }
+
+      let res = checkDoorCollision(proj);
+
+      let copy = Rooms[this.roomPosition[0]][this.roomPosition[1]].travel
+
+      switch (res) {
+        case 'up':
+          if (copy.up.open==0){
+            this.getCurrentRoom().projectiles.splice(i, 1);
+            Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.up.shotcount += 1;
+          }
+          break;
+        case 'down':
+          if (copy.down.open==0){
+            this.getCurrentRoom().projectiles.splice(i, 1);
+            Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.down.shotcount += 1;
+          }
+          break;
+        case 'left':
+          if (copy.left.open==0){
+            this.getCurrentRoom().projectiles.splice(i, 1);
+            Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.left.shotcount += 1;
+          }
+          break;
+        case 'right':
+          if (copy.right.open==0){
+            this.getCurrentRoom().projectiles.splice(i, 1);
+            Rooms[this.roomPosition[0]][this.roomPosition[1]].travel.right.shotcount += 1;
+          }
+          break;
       }
     }
 
