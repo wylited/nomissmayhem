@@ -4,6 +4,7 @@ import { Player } from './Player.js';
 import { Projectile } from './Projectile.js';
 import { Renderer } from './Renderer.js';
 import { checkCollision } from './utils.js';
+import { Music } from './Music.js';
 
 export class Game {
   constructor() {
@@ -11,6 +12,8 @@ export class Game {
     this.blurCanvas = document.getElementById('blurCanvas');
     this.scoreElement = document.getElementById('score');
     this.dashElement = document.getElementById('dash');
+
+    this.music = new Music();
 
     this.player = new Player(CANVAS.WIDTH / 2, CANVAS.HEIGHT / 2);
     this.renderer = new Renderer(this.canvas, this.blurCanvas);
@@ -32,7 +35,29 @@ export class Game {
   setup() {
     this.resizeCanvas();
     this.setupEventListeners();
+
+    this.music.init();
+    this.setupMusicControls();
+
     this.gameLoop();
+  }
+
+  setupMusicControls() {
+    // Optional: Add music controls with 'M' key to mute/unmute
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'm') {
+        if (this.music.currentAudio.paused) {
+          this.music.play();
+        } else {
+          this.music.stop();
+        }
+      }
+    });
+
+    // Start playing music on first click (many browsers require user interaction)
+    window.addEventListener('click', () => {
+      this.music.play();
+    }, { once: true });
   }
 
   resizeCanvas() {
