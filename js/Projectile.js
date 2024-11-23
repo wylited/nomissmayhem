@@ -2,11 +2,12 @@
 import { CANVAS, PROJECTILE } from './constants.js';
 
 export class Projectile {
-  constructor(x, y, angle) {
-    this.x = x;
-    this.y = y;
-    this.dx = Math.cos(angle) * PROJECTILE.SPEED;
-    this.dy = Math.sin(angle) * PROJECTILE.SPEED;
+  constructor(x, y, angle, playerRadius) {  // Add playerRadius parameter
+    this.x = x + playerRadius * Math.cos(angle);
+    this.y = y + playerRadius * Math.sin(angle);
+
+    this.dx = PROJECTILE.SPEED * Math.cos(angle);
+    this.dy = PROJECTILE.SPEED * Math.sin(angle);
     this.radius = PROJECTILE.RADIUS;
     this.bounces = 0;
     this.canHurt = false;

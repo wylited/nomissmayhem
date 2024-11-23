@@ -9,6 +9,7 @@ export class Game {
   constructor() {
     this.canvas = document.getElementById('gameCanvas');
     this.blurCanvas = document.getElementById('blurCanvas');
+    this.scoreElement = document.getElementById('score');
     this.dashElement = document.getElementById('dash');
 
     this.player = new Player(CANVAS.WIDTH / 2, CANVAS.HEIGHT / 2);
@@ -75,7 +76,7 @@ export class Game {
       const canvasY = e.clientY - rect.top;
 
       const angle = Math.atan2(canvasY - this.player.y, canvasX - this.player.x);
-      this.projectiles.push(new Projectile(this.player.x, this.player.y, angle));
+      this.projectiles.push(new Projectile(this.player.x, this.player.y, angle, 35));
     });
   }
 
