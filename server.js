@@ -14,13 +14,12 @@ app.use(express.static(path.join(__dirname))); // Serve static files
 // In-memory leaderboard
 let leaderboard = [];
 
-// API endpoint to get the leaderboard
+// API endpoints
 app.get('/api/leaderboard', (req, res) => {
   const sortedLeaderboard = leaderboard.sort((a, b) => b.score - a.score).slice(0, 10);
   res.json(sortedLeaderboard);
 });
 
-// API endpoint to submit a score
 app.post('/api/leaderboard', (req, res) => {
   const { name, score, time } = req.body;
   leaderboard.push({ name, score, time });
