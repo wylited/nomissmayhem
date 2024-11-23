@@ -110,6 +110,10 @@ export class Player {
   }
 
   addPowerup(power) {
+    switch (power) {
+      case "extraballs":
+        
+    }
     console.log(power);
   }
 }
