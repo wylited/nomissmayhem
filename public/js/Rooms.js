@@ -307,7 +307,7 @@ const keyRoom = {
 };
 
 
-const keyedRoom = {
+const winningRoom = {
     background: "/rooms/room1.png",
     travel: {
         up: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
@@ -316,15 +316,13 @@ const keyedRoom = {
         right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('regular', 150, 100),
-        EnemyFactory.createEnemy('regular', 400, 100),
-        EnemyFactory.createEnemy('attacker', 400, 100)
+
     ],
     projectiles: [],
     coins: [],
     keys: [],
     health:[],
-    type: "regular",
+    type: "win",
     visited: 0
 };
 
@@ -337,7 +335,7 @@ export const Rooms = [
     [defaultRoom05, storeRoom15, nullTile],
     [defaultRoom04, defaultRoom14, nullTile],
     [tutorialRoom3, shopRoom, emptyRoom],
-    [nullTile, nullTile, tutorialRoom2],
+    [winningRoom, nullTile, tutorialRoom2],
     [nullTile, nullTile, tutorialRoom]
 ];
 
