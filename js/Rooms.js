@@ -45,6 +45,7 @@ const testRoom = {
         EnemyFactory.createEnemy('regular', 150, 100),
     ],
     projectiles: [],
+    coins: [],
 };
 
 export const startIndex = [1, 0];

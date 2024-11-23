@@ -28,8 +28,8 @@ export class Player {
       const newX = this.x + Math.cos(angle) * this.dashDistance;
       const newY = this.y + Math.sin(angle) * this.dashDistance;
 
-      this.x = Math.max(this.radius, Math.min(CANVAS.WIDTH - this.radius, newX));
-      this.y = Math.max(this.radius, Math.min(CANVAS.HEIGHT - this.radius, newY));
+      // this.x = Math.max(this.radius, Math.min(CANVAS.WIDTH - this.radius, newX));
+      //this.y = Math.max(this.radius, Math.min(CANVAS.HEIGHT - this.radius, newY));
 
       this.canDash = false;
       this.isDashing = true;

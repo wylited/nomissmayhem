@@ -116,8 +116,8 @@ export class AttackerEnemy extends Enemy {
         this.minDistanceFromPlayer = this.radius * 12; // Increased distance for attacker
         this.projectileSpeed = 10; // Projectile speed
         this.coinDrop = {
-            type: 'gold',
-            value: 5
+            type: 'silver',
+            value: 2
         };
     }
 
