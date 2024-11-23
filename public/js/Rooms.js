@@ -126,7 +126,7 @@ const tutorialRoom2 = {
         right: { type: "wall", open: 1, openreq: 0, shotcount: 0 },
     },
     enemies: [
-        EnemyFactory.createEnemy('regular', 150, 100, 'key1', true, true)
+        EnemyFactory.createEnemy('regular', 150, 100, 'bruh', false, true)
     ],
     projectiles: [],
     coins: [],
