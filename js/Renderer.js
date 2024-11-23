@@ -1,10 +1,25 @@
-// Renderer.js
 export class Renderer {
   constructor(canvas, blurCanvas) {
     this.canvas = canvas;
     this.blurCanvas = blurCanvas;
     this.ctx = canvas.getContext('2d');
     this.blurCtx = blurCanvas.getContext('2d');
+    
+    
+
+  }
+  drawBackground() {
+    this.bgImg = new Image();
+    this.bgImg.src = "/assets/rooms/room1.png";
+  // Draw the background image scaled to fit the canvas
+    this.ctx.drawImage(
+      this.bgImg,
+      600,
+      600,
+      this.canvas.width,
+      this.canvas.height
+    );
+    
   }
 
   drawMotionBlur(player) {
@@ -38,7 +53,15 @@ export class Renderer {
 
       player.trailPositions.forEach((pos, index) => {
         const alpha = (1 - index / player.trailPositions.length) * 0.4;
-        this.blurCtx.beginPath();
+        this.blurCtx.begi
+        /* Tainted canvas can not get pixel data on cross origin image (from cdn.playbuzz.com to stackoverflow.com)
+        var img = document.createElement("img");
+        img.src = ctx.canvas.toDataURL();
+        img.addEventListener("load", () => {
+              show_img_here.appendChild(img);
+        }, {once: true});
+         nPath();*/
+
         this.blurCtx.arc(pos.x, pos.y, player.radius * 1.2, 0, Math.PI * 2);
         this.blurCtx.fillStyle = `rgba(68, 136, 255, ${alpha})`;
         this.blurCtx.fill();
@@ -53,10 +76,19 @@ export class Renderer {
       });
     }
   }
-
-  render(player, projectiles, mouseX, mouseY) {
-    this.ctx.fillStyle = '#111';
+  
+  render(player, projectiles, mouseX, mouseY, imgsrc) {
+    // Clear the entire canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.bgImg = new Image();
+    this.bgImg.src = '/assets/' + imgsrc;
+    // Draw background first if loaded
+    this.ctx.drawImage(this.bgImg, 0, 0, this.canvas.width, this.canvas.height);
+    
+    // Add overlay effect
+    this.ctx.fillStyle = "rgba(200, 0, 0, 0.5)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    
 
     this.drawMotionBlur(player);
 
