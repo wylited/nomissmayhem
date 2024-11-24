@@ -155,12 +155,18 @@ export class Game {
     if ((door.type=='door') && door.open==1) {
       return true;
     }
+    console.log(this.player.keys)
+
+    if ((door.type=='key') && this.player.keys.includes("key1")) {
+      return true;
+    }
 
     if (door.type=='door' && door.shotcount >= door.openreq) {
       //console.log('UNLOCK')
 
       return true;
     }
+
     return false;
   }
 
@@ -233,6 +239,11 @@ export class Game {
     }
     
     this.canvas.width
+    
+    if (this.getCurrentRoom().type === "win") {
+        this.gameWin();
+        return;
+    }
   }
 
   updateTimer() {
@@ -468,6 +479,106 @@ export class Game {
       location.reload(); // Reload the page to restart the game
     };
     overlay.appendChild(retryButton);
+    
+    document.body.appendChild(overlay);
+  }
+
+  gameWin() {
+    this.isGameRunning = false;
+    
+    // Create win overlay
+    const overlay = document.createElement('div');
+    overlay.style.position = 'absolute';
+    overlay.style.top = '50%';
+    overlay.style.left = '50%';
+    overlay.style.transform = 'translate(-50%, -50%)';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+    overlay.style.padding = '20px';
+    overlay.style.borderRadius = '10px';
+    overlay.style.textAlign = 'center';
+    overlay.style.zIndex = '1000';
+    
+    // Add win text
+    const winText = document.createElement('h1');
+    winText.textContent = 'You Won!';
+    winText.style.color = 'white';
+    overlay.appendChild(winText);
+    
+    // Add final stats
+    const statsText = document.createElement('div');
+    statsText.innerHTML = `
+        <p style="color: white">Final Time: ${this.timerElement.textContent}</p>
+        <p style="color: white">Coins Collected: ${this.player.getMoney()}</p>
+    `;
+    overlay.appendChild(statsText);
+    
+    // Add name input
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = 'Enter your name';
+    nameInput.style.margin = '10px';
+    nameInput.style.padding = '5px';
+    overlay.appendChild(nameInput);
+    
+    // Add submit score button
+    const submitButton = document.createElement('button');
+    submitButton.textContent = 'Submit Score';
+    submitButton.style.padding = '10px 20px';
+    submitButton.style.margin = '10px';
+    submitButton.style.cursor = 'pointer';
+    let time = minutes*60 + remainingSeconds
+    submitButton.onclick = async () => {
+        if (nameInput.value.trim()) {
+            try {
+
+                const response = await fetch('/api/leaderboard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: nameInput.value.trim(),
+                        score: time,
+                        time: this.timerElement.textContent
+                    })
+                });
+                
+                if (response.ok) {
+                    submitButton.textContent = 'Score Submitted!';
+                    submitButton.disabled = true;
+                    nameInput.disabled = true;
+                    
+                    // Show leaderboard
+                    const leaderboardData = await fetch('/api/leaderboard').then(res => res.json());
+                    const leaderboardDiv = document.createElement('div');
+                    leaderboardDiv.innerHTML = `
+                        <h2 style="color: white">Top Scores</h2>
+                        ${leaderboardData.map((entry, index) => `
+                            <p style="color: white">${index + 1}. ${entry.name} - ${entry.score} coins (${entry.time})</p>
+                        `).join('')}
+                    `;
+                    overlay.appendChild(leaderboardDiv);
+                }
+            } catch (error) {
+                console.error('Error submitting score:', error);
+                submitButton.textContent = 'Error Submitting Score';
+            }
+        } else {
+            nameInput.style.border = '2px solid red';
+        }
+    };
+    overlay.appendChild(submitButton);
+    
+    // Add play again button
+    const playAgainButton = document.createElement('button');
+    playAgainButton.textContent = 'Play Again';
+    playAgainButton.style.padding = '10px 20px';
+    playAgainButton.style.margin = '10px';
+    playAgainButton.style.cursor = 'pointer';
+    playAgainButton.onclick = () => {
+        location.reload();
+    };
+    overlay.appendChild(playAgainButton);
     
     document.body.appendChild(overlay);
   }

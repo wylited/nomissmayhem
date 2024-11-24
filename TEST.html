@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #2c3e50;
+            font-family: Arial, sans-serif;
+        }
+
+        .leaderboard-container {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            width: 300px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .leaderboard-title {
+            text-align: center;
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px solid #FFD700;
+            color: #FFD700;
+        }
+
+        .leaderboard-table td {
+            padding: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .leaderboard-table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .rank-1 {
+            color: #FFD700 !important;
+            font-weight: bold;
+        }
+
+        .rank-2 {
+            color: #C0C0C0 !important;
+            font-weight: bold;
+        }
+
+        .rank-3 {
+            color: #CD7F32 !important;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="leaderboard-container">
+        <div class="leaderboard-title">Top Players</div>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Score</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+                <tr>
+                    <td colspan="4" class="loading">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const FETCH_INTERVAL = 5000; // Update every 5 seconds
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        async function updateLeaderboard() {
+            try {
+                const response = await fetch('https://nomissmayhem.vercel.app/api/leaderboard');
+                const data = await response.json();
+                
+                const tbody = document.getElementById('leaderboard-body');
+                
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="loading">No scores yet</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.map((entry, index) => `
+                    <tr>
+                        <td class="rank-${index + 1}">${index + 1}</td>
+                        <td class="rank-${index + 1}">${entry.name}</td>
+                        <td class="rank-${index + 1}">${entry.score}</td>
+                        <td class="rank-${index + 1}">${formatTime(entry.time)}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+                const tbody = document.getElementById('leaderboard-body');
+                tbody.innerHTML = '<tr><td colspan="4" class="loading">Error loading leaderboard</td></tr>';
+            }
+        }
+
+        // Initial update
+        updateLeaderboard();
+
+        // Set up periodic updates
+        setInterval(updateLeaderboard, FETCH_INTERVAL);
+    </script>
+</body>
+</html>

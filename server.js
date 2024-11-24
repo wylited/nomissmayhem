@@ -1,15 +1,16 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname))); // Serve static files
+app.use(express.json());
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory leaderboard
 let leaderboard = [];
@@ -26,7 +27,6 @@ app.post('/api/leaderboard', (req, res) => {
   res.json({ message: 'Score submitted', score: { name, score, time } });
 });
 
-// Serve the main HTML file
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });

@@ -91,3 +91,34 @@ body {
     font-family: Arial, sans-serif;
     font-size: 30px;
 }
+
+#game-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+}
+
+#leaderboard {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    min-width: 200px;
+    margin-top: 50px;
+}
+
+#leaderboard h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.leaderboard-entry {
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaderboard-entry:last-child {
+    border-bottom: none;
+}
