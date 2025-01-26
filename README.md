@@ -6,6 +6,8 @@ Play right now at [nomissmayhem](https://nomissmayhem.vercel.app) (desktop only.
 
 > ***THIS CODE WILL NOT BE UPDATED FURTHER THAN THE 12 HOUR COUNTERPSELL SUBMISSION!***
 
+Please visit [this repository](https://github.com/13carpileup/nomissmayhem) for the updated code.
+
 ## Credits
 
 Initially created for [Hack Club's](https://hackclub.com/) [Counterspell Game Jam](https://counterspell.hackclub.com/)
